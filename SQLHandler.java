@@ -368,15 +368,35 @@ public class SQLHandler
 //		
 //		}
 	
+	
+	public void toOutput(ResultSet rs) {
+		try {
+				
+			int count = getNumColumns(rs);
+			while (rs.next()) {
+			for (int i = 0; i < count; i++) {
+			System.out.print(rs.getString(i));
+			System.out.print("\t");
+			}
+			System.out.println("");
+			}
+		
+			
+		} catch ( SQLException e )
+		{
+			handleSQLError( e, "Next Row" );
+		} 
+	}
 	/**
-	 * @return an arraylist with the city - library combo that will fill various dropdowns
+	 * @return an ArrayList with the city - library combo that will fill various dropdowns
 	 */
-	private ArrayList<String> getLibraries() {
+	public ArrayList<String> getLibraries() {
 		ArrayList<String> returner = new ArrayList<String>();
 		returner.addAll(siglumMap.keySet());
 		Collections.sort(returner);
 		return returner;
 	}
+
 	
 	private String queryString(String[] at) {
 		if (at.length == 1) {
@@ -419,7 +439,7 @@ public class SQLHandler
 
 	        try 
 	        {
-	        	con = DriverManager.getConnection("jdbc:mysql://mysql.cs.jmu.edu/Orders",
+	        	con = DriverManager.getConnection("jdbc:mysql://mysql.cs.jmu.edu/Manuscript2018",
 	                                              "nortonml", "visitatio");
 	        	// System.out.println("Connection Made");
 	            
