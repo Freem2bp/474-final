@@ -1,4 +1,4 @@
-package Database;
+package sql_project;
 
 import java.awt.EventQueue;
 
@@ -11,6 +11,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractListModel;
 import javax.swing.JScrollPane;
@@ -27,6 +28,7 @@ public class GUI {
 	private String dateFrom;
 	private String dateThru;
 	private String provenance;
+	private SQLHandler handler;
 	
 
 	/**
@@ -49,7 +51,10 @@ public class GUI {
 	 * Create the application.
 	 */
 	public GUI() {
+		handler = SQLHandler.getSQLHandler();
 		initialize();
+		
+		
 	}
 
 	/**
@@ -88,13 +93,15 @@ public class GUI {
 			}
 		});
 		scrollPane.setViewportView(list);
+		ArrayList<String> libraries = handler.getLibraries();
 		list.setModel(new AbstractListModel() {
-			String[] values = new String[] {"Rose", "Carrier", "music", "boom", "bam"};
+			
+			//String[] values = new String[] {"Rose", "Carrier", "music", "boom", "bam"};
 			public int getSize() {
-				return values.length;
+				return libraries.size();
 			}
 			public Object getElementAt(int index) {
-				return values[index];
+				return libraries.get(index);
 			}
 		});
 		
@@ -110,12 +117,12 @@ public class GUI {
 		});
 		scrollPane_1.setViewportView(list_1);
 		list_1.setModel(new AbstractListModel() {
-			String[] values = new String[] {"heaven", "computer", "cs", "cis", "philosophy", "next", "thing", "in ", "the ", "list"};
+			//String[] values = new String[] {"heaven", "computer", "cs", "cis", "philosophy", "next", "thing", "in ", "the ", "list"};
 			public int getSize() {
-				return values.length;
+				return libraries.size();
 			}
 			public Object getElementAt(int index) {
-				return values[index];
+				return libraries.get(index);
 			}
 		});
 		
@@ -163,12 +170,12 @@ public class GUI {
 		});
 		scrollPane_2.setViewportView(list_2);
 		list_2.setModel(new AbstractListModel() {
-			String[] values = new String[] {"tehran", "LA", "New york", "armenia", "karaj", "lavasson"};
+			ArrayList<String> values = handler.populateList("SELECT provenanceID FROM Provenance");
 			public int getSize() {
-				return values.length;
+				return values.size();
 			}
 			public Object getElementAt(int index) {
-				return values[index];
+				return values.get(index);
 			}
 		});
 		
@@ -177,6 +184,7 @@ public class GUI {
 			public void actionPerformed(ActionEvent e) {
 				String message = libraryFrom + ' ' + libraryThru + ' ' + dateFrom + ' ' + dateThru + ' ' + provenance;
 				JOptionPane.showInputDialog(message);
+				handler.executePane1(libraryFrom, libraryThru, dateFrom, dateThru, provenance, "zz");
 			}
 		});
 		btnNewButton.setBounds(297, 429, 117, 25);
