@@ -7,6 +7,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
@@ -35,6 +36,11 @@ public class GUI2 {
 	private String dateThru;
 	private String provenance;
 	private SQLHandler handler;
+	private String table;
+	private ArrayList<String> attr = new ArrayList<String>();
+	private int count;
+	private Object[] attrs;
+	private ArrayList<String> sections = new ArrayList<String>();
 	
 
 	/**
@@ -68,12 +74,12 @@ public class GUI2 {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 775, 656);
+		frame.setBounds(100, 100, 771, 633);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(12, 12, 749, 608);
+		tabbedPane.setBounds(12, 12, 749, 572);
 		frame.getContentPane().add(tabbedPane);
 		
 		JPanel panel = new JPanel();
@@ -133,12 +139,12 @@ public class GUI2 {
 			}
 		});
 		
-		JLabel lblDateFrom = new JLabel("Date From");
-		lblDateFrom.setBounds(23, 291, 96, 15);
+		JLabel lblDateFrom = new JLabel("Century From ");
+		lblDateFrom.setBounds(23, 291, 107, 15);
 		panel.add(lblDateFrom);
 		
-		JLabel lblDateThrough = new JLabel("Date Thru");
-		lblDateThrough.setBounds(320, 291, 86, 15);
+		JLabel lblDateThrough = new JLabel("Century Thru");
+		lblDateThrough.setBounds(387, 291, 107, 15);
 		panel.add(lblDateThrough);
 		
 		textField = new JTextField();
@@ -147,7 +153,7 @@ public class GUI2 {
 				dateFrom = textField.getText();
 			}
 		});
-		textField.setBounds(136, 289, 114, 19);
+		textField.setBounds(134, 289, 116, 19);
 		panel.add(textField);
 		textField.setColumns(10);
 		
@@ -157,7 +163,7 @@ public class GUI2 {
 				dateThru = textField_1.getText().toString();
 			}
 		});
-		textField_1.setBounds(424, 289, 114, 19);
+		textField_1.setBounds(491, 289, 114, 19);
 		panel.add(textField_1);
 		textField_1.setColumns(10);
 		
@@ -189,38 +195,24 @@ public class GUI2 {
 		JButton btnNewButton = new JButton("Show Info");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String message = libraryFrom + ' ' + '\n' + libraryThru + ' ' + dateFrom + ' ' + dateThru + ' ' + provenance;
-				JOptionPane.showMessageDialog(null, message, "Query", JOptionPane.INFORMATION_MESSAGE);
-				handler.executePane1(libraryFrom, libraryThru, dateFrom, dateThru, provenance, "zz");
+				if (libraryThru == null) {
+					libraryThru = "zzz";
+				}
+				//String message = " ";
+				//message += "library from: " + libraryFrom + '\n';
+				//message += "library though: " + libraryThru + '\n';
+				//message += "date from: " + dateFrom + '\n';
+				//message += "date through: " + dateThru + '\n';
+				//message += "provenance" + provenance + '\n';
+				sections = handler.executePane1(libraryFrom, libraryThru, dateFrom, dateThru, provenance); //so instead of being an arrayList of sections its an arraylist of strings, since we would have just called toString
+				
+				
+				JOptionPane.showMessageDialog(null, sections.get(0).toString() , "Section Information", JOptionPane.INFORMATION_MESSAGE);
+				
 			}
 		});
-		btnNewButton.setBounds(300, 527, 117, 25);
+		btnNewButton.setBounds(305, 486, 117, 25);
 		panel.add(btnNewButton);
-		
-		JLabel lblProvenanceThru = new JLabel("Provenance Thru");
-		lblProvenanceThru.setBounds(23, 461, 107, 15);
-		panel.add(lblProvenanceThru);
-		
-		JScrollPane scrollPane_3 = new JScrollPane();
-		scrollPane_3.setBounds(134, 443, 476, 49);
-		panel.add(scrollPane_3);
-		
-		JList list_3 = new JList();
-		list_3.setEnabled(false);
-		list_3.setModel(new AbstractListModel() {
-			ArrayList<String> values = handler.populateList("SELECT provenanceID FROM Provenance");
-			public int getSize() {
-				return values.size();
-			}
-			public Object getElementAt(int index) {
-				return values.get(index);
-			}
-		});
-		list_3.addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent e) {
-			}
-		});
-		scrollPane_3.setViewportView(list_3);
 		
 		JCheckBox chckbxEnable = new JCheckBox("Enable");
 		chckbxEnable.addItemListener(new ItemListener() {
@@ -235,19 +227,9 @@ public class GUI2 {
 		chckbxEnable.setBounds(613, 175, 129, 23);
 		panel.add(chckbxEnable);
 		
-		JCheckBox chckbxEnable_1 = new JCheckBox("Enable");
-		chckbxEnable_1.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				if(chckbxEnable_1.isSelected()) {
-					list_3.setEnabled(true);
-				}
-				else {
-					list_3.setEnabled(false);
-				}
-			}
-		});
-		chckbxEnable_1.setBounds(618, 457, 129, 23);
-		panel.add(chckbxEnable_1);
+		JLabel label = new JLabel("(0-9999)");
+		label.setBounds(267, 291, 70, 15);
+		panel.add(label);
 		
 		JPanel panel_1 = new JPanel();
 		tabbedPane.addTab("Insert", null, panel_1, null);
@@ -258,11 +240,11 @@ public class GUI2 {
 		panel_1.add(lblSelectTable);
 		
 		JLabel lblSelectMethodOf = new JLabel("Select method of display");
-		lblSelectMethodOf.setBounds(37, 284, 178, 15);
+		lblSelectMethodOf.setBounds(33, 283, 178, 15);
 		panel_1.add(lblSelectMethodOf);
 		
 		JLabel lblNewLabel = new JLabel("please select attributes");
-		lblNewLabel.setBounds(12, 170, 184, 15);
+		lblNewLabel.setBounds(31, 170, 184, 15);
 		panel_1.add(lblNewLabel);
 		
 		JComboBox comboBox = new JComboBox();
@@ -271,6 +253,13 @@ public class GUI2 {
 		panel_1.add(comboBox);
 		
 		JList list_4 = new JList();
+		list_4.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		list_4.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				//@SuppressWarnings("deprecation")
+				attrs = list_4.getSelectedValues();
+			}
+		});
 		JCheckBox chckbxCheckIfYou = new JCheckBox("check if you want specific attributes of table");
 		chckbxCheckIfYou.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -291,15 +280,15 @@ public class GUI2 {
 		panel_1.add(chckbxCheckIfYou);
 		
 		JRadioButton rdbtnOrderBy = new JRadioButton("order by");
-		rdbtnOrderBy.setBounds(103, 339, 149, 23);
+		rdbtnOrderBy.setBounds(101, 319, 149, 23);
 		panel_1.add(rdbtnOrderBy);
 		
 		JRadioButton rdbtnSortBy = new JRadioButton("sort by");
-		rdbtnSortBy.setBounds(281, 339, 149, 23);
+		rdbtnSortBy.setBounds(281, 319, 149, 23);
 		panel_1.add(rdbtnSortBy);
 		
 		JRadioButton rdbtnGroupBy = new JRadioButton("group by");
-		rdbtnGroupBy.setBounds(442, 339, 149, 23);
+		rdbtnGroupBy.setBounds(452, 319, 149, 23);
 		panel_1.add(rdbtnGroupBy);
 		
 		//JList list_4 = new JList();
@@ -312,8 +301,39 @@ public class GUI2 {
 				return values[index];
 			}
 		});
-		list_4.setBounds(194, 169, 443, 85);
+		list_4.setBounds(209, 169, 443, 85);
 		list_4.setEnabled(false);
 		panel_1.add(list_4);
+		
+		JButton btnExecuteQuery = new JButton("Execute Query");
+		btnExecuteQuery.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String sen = "";
+				for(Object attribute: attrs) {
+					sen += (String)attribute;
+				}
+				String c = "count" + ' ' + count; 
+				JOptionPane.showMessageDialog(null, sen);
+				sen = "";
+			}
+		});
+		btnExecuteQuery.setBounds(263, 416, 198, 25);
+		panel_1.add(btnExecuteQuery);
+		
+		JPanel panel_2 = new JPanel();
+		tabbedPane.addTab("New tab", null, panel_2, null);
+		panel_2.setLayout(null);
+		
+		JLabel lblSelectTable_1 = new JLabel("Select table");
+		lblSelectTable_1.setBounds(34, 35, 105, 15);
+		panel_2.add(lblSelectTable_1);
+		
+		JComboBox comboBox_1 = new JComboBox();
+		comboBox_1.setBounds(146, 30, 521, 24);
+		panel_2.add(comboBox_1);
+		
+		JLabel lblSelectAttributesYou = new JLabel("select attributes you want to insert into the table");
+		lblSelectAttributesYou.setBounds(36, 95, 418, 15);
+		panel_2.add(lblSelectAttributesYou);
 	}
 }
