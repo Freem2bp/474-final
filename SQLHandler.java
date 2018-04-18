@@ -112,7 +112,7 @@ public class SQLHandler
 			String libSiglum1, libSiglum2;
 			libSiglum1 = siglumMap.get(libraryFrom);
 			libSiglum2 = siglumMap.get(LibraryTo);
-			String query = "Select libSiglum + ' ' + msSiglum AS siglum, liturgicalOccasion, date, provenanceID From Section where (libSiglum BETWEEN '" + libSiglum1 + "' AND '" + libSiglum2 + "') "
+			String query = "Select CONCAT(libSiglum,' ',msSiglum) AS siglum, liturgicalOccasion, date, provenanceID From Section where (libSiglum BETWEEN '" + libSiglum1 + "' AND '" + libSiglum2 + "') "
 					+ "AND (date BETWEEN '" + dateFrom + "' AND '" + dateTo + "') AND (provenanceID = '" + provenance + "')" ;
 			try
 			{
