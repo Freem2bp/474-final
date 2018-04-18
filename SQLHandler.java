@@ -105,15 +105,15 @@ public class SQLHandler
 		}	
 	}
 	
-	public ArrayList<Section> executePane1(String libraryFrom, String LibraryTo, String dateFrom, String dateTo, String provenanceFrom, String provenanceTo) {
+	public ArrayList<String> executePane1(String libraryFrom, String LibraryTo, String dateFrom, String dateTo, String provenance) {
 		
 			ResultSet rs = null;
-			ArrayList<Section> returnList = new ArrayList<Section>();
+			ArrayList<String> returnList = new ArrayList<String>();
 			String libSiglum1, libSiglum2;
 			libSiglum1 = siglumMap.get(libraryFrom);
 			libSiglum2 = siglumMap.get(LibraryTo);
-			String query = "Select libSiglum + ' ' msSiglum AS siglum, liturgicalOccasion, date, provenanceID From Section where (libSiglum BETWEEN '" + libSiglum1 + "' AND '" + libSiglum2 + "') "
-					+ "AND (date BETWEEN '" + dateFrom + "' AND '" + dateTo + "') AND (provenanceID BETWEEN '" + provenanceFrom + "' AND '" + provenanceTo + "')" ;
+			String query = "Select libSiglum + ' ' + msSiglum AS siglum, liturgicalOccasion, date, provenanceID From Section where (libSiglum BETWEEN '" + libSiglum1 + "' AND '" + libSiglum2 + "') "
+					+ "AND (date BETWEEN '" + dateFrom + "' AND '" + dateTo + "') AND (provenanceID = '" + provenance + "')" ;
 			try
 			{
 				rs = stmt.executeQuery(query);
@@ -135,7 +135,10 @@ public class SQLHandler
 						prov = "?";
 					}
 					
-					returnList.add(new Section("1", siglum, lio, date, prov));
+					returnList.add(new Section("1", siglum, lio, date, prov).toString());
+				}
+				if (returnList.isEmpty()) {
+					returnList.add("Your search yielded no results");
 				}
 				
 				
