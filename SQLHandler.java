@@ -12,7 +12,7 @@ import java.util.HashMap;
  * 
  * Modifications: Adopted the Singleton Design Pattern (3/21)
  * 
- * @author Michael Norton
+ * @author Brian Freeman
  * @version 1.0
  *
  */
@@ -105,19 +105,41 @@ public class SQLHandler
 		}	
 	}
 	
-	public ResultSet executePane1(String libraryFrom, String LibraryTo, String dateFrom, String dateTo, String provenanceFrom, String provenanceTo) {
+	public ArrayList<Section> executePane1(String libraryFrom, String LibraryTo, String dateFrom, String dateTo, String provenanceFrom, String provenanceTo) {
 		
 			ResultSet rs = null;
-			
+			ArrayList<Section> returnList = new ArrayList<Section>();
 			String libSiglum1, libSiglum2;
 			libSiglum1 = siglumMap.get(libraryFrom);
 			libSiglum2 = siglumMap.get(LibraryTo);
-			String query = "Select * From Section where (libSiglum BETWEEN '" + libSiglum1 + "' AND '" + libSiglum2 + "') "
+			String query = "Select libSiglum + ' ' msSiglum AS siglum, liturgicalOccasion, date, provenanceID From Section where (libSiglum BETWEEN '" + libSiglum1 + "' AND '" + libSiglum2 + "') "
 					+ "AND (date BETWEEN '" + dateFrom + "' AND '" + dateTo + "') AND (provenanceID BETWEEN '" + provenanceFrom + "' AND '" + provenanceTo + "')" ;
 			try
 			{
 				rs = stmt.executeQuery(query);
-			
+				String siglum, lio, date, prov;
+				while (rs.next()) {
+					siglum = rs.getString("siglum");
+
+					lio = rs.getString("liturgicalOccasion");
+					date = rs.getString("date");
+					prov = rs.getString("provenanceID");
+					
+					if (lio == null || lio == "null") {
+						lio = "?";
+					}
+					if (date == null || date == "null") {
+						date = "?";
+					}
+					if (prov == null || prov == "null") {
+						prov = "?";
+					}
+					
+					returnList.add(new Section("1", siglum, lio, date, prov));
+				}
+				
+				
+				
 			} // end try
 			
 			catch ( SQLException e)
@@ -126,7 +148,7 @@ public class SQLHandler
 			
 			} // end catch
 			
-			return rs;	
+			return returnList;	
 	}
 	
 	public ResultSet executeStructuredQuery(String selOrBy, String[] attributes, String table, String extra) {
@@ -369,7 +391,7 @@ public class SQLHandler
 //		}
 	
 	
-	public void toOutput(ResultSet rs) {
+	public void toBasicOutput(ResultSet rs) {
 		try {
 				
 			int count = getNumColumns(rs);
