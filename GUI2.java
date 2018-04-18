@@ -17,6 +17,12 @@ import javax.swing.AbstractListModel;
 import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JRadioButton;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 public class GUI2 {
 
@@ -62,12 +68,12 @@ public class GUI2 {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 731, 658);
+		frame.setBounds(100, 100, 775, 656);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(12, 12, 705, 608);
+		tabbedPane.setBounds(12, 12, 749, 608);
 		frame.getContentPane().add(tabbedPane);
 		
 		JPanel panel = new JPanel();
@@ -110,6 +116,7 @@ public class GUI2 {
 		panel.add(scrollPane_1);
 		
 		JList list_1 = new JList();
+		list_1.setEnabled(false);
 		list_1.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
 				libraryThru = list_1.getSelectedValue().toString();
@@ -182,8 +189,8 @@ public class GUI2 {
 		JButton btnNewButton = new JButton("Show Info");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String message = libraryFrom + ' ' + libraryThru + ' ' + dateFrom + ' ' + dateThru + ' ' + provenance;
-				JOptionPane.showInputDialog(message);
+				String message = libraryFrom + ' ' + '\n' + libraryThru + ' ' + dateFrom + ' ' + dateThru + ' ' + provenance;
+				JOptionPane.showMessageDialog(null, message, "Query", JOptionPane.INFORMATION_MESSAGE);
 				handler.executePane1(libraryFrom, libraryThru, dateFrom, dateThru, provenance, "zz");
 			}
 		});
@@ -199,6 +206,7 @@ public class GUI2 {
 		panel.add(scrollPane_3);
 		
 		JList list_3 = new JList();
+		list_3.setEnabled(false);
 		list_3.setModel(new AbstractListModel() {
 			ArrayList<String> values = handler.populateList("SELECT provenanceID FROM Provenance");
 			public int getSize() {
@@ -214,7 +222,98 @@ public class GUI2 {
 		});
 		scrollPane_3.setViewportView(list_3);
 		
+		JCheckBox chckbxEnable = new JCheckBox("Enable");
+		chckbxEnable.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if(chckbxEnable.isSelected()) {
+					list_1.setEnabled(true);
+				} else {
+					list_1.setEnabled(false);
+				}
+			}
+		});
+		chckbxEnable.setBounds(613, 175, 129, 23);
+		panel.add(chckbxEnable);
+		
+		JCheckBox chckbxEnable_1 = new JCheckBox("Enable");
+		chckbxEnable_1.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if(chckbxEnable_1.isSelected()) {
+					list_3.setEnabled(true);
+				}
+				else {
+					list_3.setEnabled(false);
+				}
+			}
+		});
+		chckbxEnable_1.setBounds(618, 457, 129, 23);
+		panel.add(chckbxEnable_1);
+		
 		JPanel panel_1 = new JPanel();
 		tabbedPane.addTab("Insert", null, panel_1, null);
+		panel_1.setLayout(null);
+		
+		JLabel lblSelectTable = new JLabel("Select Table");
+		lblSelectTable.setBounds(33, 41, 120, 15);
+		panel_1.add(lblSelectTable);
+		
+		JLabel lblSelectMethodOf = new JLabel("Select method of display");
+		lblSelectMethodOf.setBounds(37, 284, 178, 15);
+		panel_1.add(lblSelectMethodOf);
+		
+		JLabel lblNewLabel = new JLabel("please select attributes");
+		lblNewLabel.setBounds(12, 170, 184, 15);
+		panel_1.add(lblNewLabel);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"hello", "how ", "are ", "you"}));
+		comboBox.setBounds(135, 36, 502, 31);
+		panel_1.add(comboBox);
+		
+		JList list_4 = new JList();
+		JCheckBox chckbxCheckIfYou = new JCheckBox("check if you want specific attributes of table");
+		chckbxCheckIfYou.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if(chckbxCheckIfYou.isSelected()) {
+					list_4.setEnabled(true);
+				}
+				else {
+					list_4.setEnabled(false);
+				}
+			}
+		});
+		//chckbxCheckIfYou.addActionListener(new ActionListener() {
+			//public void actionPerformed(ActionEvent e) {
+				//list_4.setEnabled(true);
+			//}
+		//});
+		chckbxCheckIfYou.setBounds(186, 93, 378, 23);
+		panel_1.add(chckbxCheckIfYou);
+		
+		JRadioButton rdbtnOrderBy = new JRadioButton("order by");
+		rdbtnOrderBy.setBounds(103, 339, 149, 23);
+		panel_1.add(rdbtnOrderBy);
+		
+		JRadioButton rdbtnSortBy = new JRadioButton("sort by");
+		rdbtnSortBy.setBounds(281, 339, 149, 23);
+		panel_1.add(rdbtnSortBy);
+		
+		JRadioButton rdbtnGroupBy = new JRadioButton("group by");
+		rdbtnGroupBy.setBounds(442, 339, 149, 23);
+		panel_1.add(rdbtnGroupBy);
+		
+		//JList list_4 = new JList();
+		list_4.setModel(new AbstractListModel() {
+			String[] values = new String[] {"make", "sure ", "to ", "select"};
+			public int getSize() {
+				return values.length;
+			}
+			public Object getElementAt(int index) {
+				return values[index];
+			}
+		});
+		list_4.setBounds(194, 169, 443, 85);
+		list_4.setEnabled(false);
+		panel_1.add(list_4);
 	}
 }
