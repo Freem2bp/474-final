@@ -1,4 +1,4 @@
-package db;
+package sql_project;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -105,15 +105,31 @@ public class SQLHandler
 		}	
 	}
 	
-	public ArrayList<String> executePane1(String libraryFrom, String LibraryTo, String dateFrom, String dateTo, String provenance) {
+	public ArrayList<String> executePane1(String libraryFrom, String LibraryTo, String dateFrom, String dateTo, String provenance1, String provenance2) {
 		
 			ResultSet rs = null;
 			ArrayList<String> returnList = new ArrayList<String>();
 			String libSiglum1, libSiglum2;
 			libSiglum1 = siglumMap.get(libraryFrom);
 			libSiglum2 = siglumMap.get(LibraryTo);
-			String query = "Select CONCAT(libSiglum,' ',msSiglum) AS siglum, liturgicalOccasion, date, provenanceID From Section where (libSiglum BETWEEN '" + libSiglum1 + "' AND '" + libSiglum2 + "') "
-					+ "AND (date BETWEEN '" + dateFrom + "' AND '" + dateTo + "') AND (provenanceID = '" + provenance + "')" ;
+			String query = "";
+			
+			
+				
+			
+			if (LibraryTo == null && dateFrom != null) {
+				query = "Select CONCAT(libSiglum,' ',msSiglum) AS siglum, liturgicalOccasion, date, provenanceID From Section where (libSiglum = '" + libSiglum1 + "') "
+						+ "AND (date BETWEEN '" + dateFrom + "' AND '" + dateTo + "') AND (provenanceID = '" + provenance1 + "')" ;
+			} else if(dateFrom == null || dateTo == null) {
+				query = "Select CONCAT(libSiglum,' ',msSiglum) AS siglum, liturgicalOccasion, date, provenanceID From Section where (libSiglum = '" + libSiglum1 + "') "
+						+ "AND (provenanceID = '" + provenance1 + "')" ;  
+			} else {
+				query = "Select CONCAT(libSiglum,' ',msSiglum) AS siglum, liturgicalOccasion, date, provenanceID From Section where (libSiglum BETWEEN '" + libSiglum1 + "' AND '" + libSiglum2 + "') "
+						+ "AND (date BETWEEN '" + dateFrom + "' AND '" + dateTo + "') AND (provenanceID BETWEEN '" + provenance1 + "' AND '" + provenance2 + "')" ;
+			}
+			
+			
+			
 			try
 			{
 				rs = stmt.executeQuery(query);

@@ -24,6 +24,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JRadioButton;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import java.awt.Color;
 
 public class GUI2 {
 
@@ -34,7 +35,8 @@ public class GUI2 {
 	private String libraryThru;
 	private String dateFrom;
 	private String dateThru;
-	private String provenance;
+	private String provenanceFr;
+	private String provenanceTo;
 	private SQLHandler handler;
 	private String table;
 	private ArrayList<String> attr = new ArrayList<String>();
@@ -74,15 +76,18 @@ public class GUI2 {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.setBackground(Color.WHITE);
 		frame.setBounds(100, 100, 771, 633);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setBackground(Color.CYAN);
 		tabbedPane.setBounds(12, 12, 749, 572);
 		frame.getContentPane().add(tabbedPane);
 		
 		JPanel panel = new JPanel();
+		panel.setBackground(Color.ORANGE);
 		tabbedPane.addTab("Load Info", null, panel, null);
 		panel.setLayout(null);
 		
@@ -178,7 +183,7 @@ public class GUI2 {
 		JList list_2 = new JList();
 		list_2.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
-				provenance = list_2.getSelectedValue().toString();
+				provenanceFr = list_2.getSelectedValue().toString();
 			}
 		});
 		scrollPane_2.setViewportView(list_2);
@@ -204,10 +209,19 @@ public class GUI2 {
 				//message += "date from: " + dateFrom + '\n';
 				//message += "date through: " + dateThru + '\n';
 				//message += "provenance" + provenance + '\n';
-				sections = handler.executePane1(libraryFrom, libraryThru, dateFrom, dateThru, provenance); //so instead of being an arrayList of sections its an arraylist of strings, since we would have just called toString
+				sections = handler.executePane1(libraryFrom, libraryThru, dateFrom, dateThru, provenanceFr, provenanceTo); //so instead of being an arrayList of sections its an arraylist of strings, since we would have just called toString
+				
+				for(String section: sections) {
+					JOptionPane.showMessageDialog(null, section , "Section Information", JOptionPane.INFORMATION_MESSAGE);
+					int dialogButton = JOptionPane.YES_NO_OPTION;
+				    int dialogResult = JOptionPane.showConfirmDialog (null, "Would You Like to see the next section?","Continue?",dialogButton);
+				    if (dialogResult == JOptionPane.NO_OPTION) {
+				    	break;
+				    }
+				}
 				
 				
-				JOptionPane.showMessageDialog(null, sections.get(0).toString() , "Section Information", JOptionPane.INFORMATION_MESSAGE);
+				//JOptionPane.showMessageDialog(null, sections.get(1).toString() , "Section Information", JOptionPane.INFORMATION_MESSAGE);
 				
 			}
 		});
@@ -231,7 +245,33 @@ public class GUI2 {
 		label.setBounds(267, 291, 70, 15);
 		panel.add(label);
 		
+		JLabel lblProvenanceThru = new JLabel("Provenance Thru");
+		lblProvenanceThru.setBounds(23, 430, 129, 15);
+		panel.add(lblProvenanceThru);
+		
+		JScrollPane scrollPane_3 = new JScrollPane();
+		scrollPane_3.setBounds(151, 410, 458, 49);
+		panel.add(scrollPane_3);
+		
+		JList list_3 = new JList();
+		scrollPane_3.setViewportView(list_3);
+		list_3.setModel(new AbstractListModel() {
+			ArrayList<String> values = handler.populateList("SELECT provenanceID FROM Provenance");
+			public int getSize() {
+				return values.size();
+			}
+			public Object getElementAt(int index) {
+				return values.get(index);
+			}
+		});
+		list_3.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				provenanceTo = list_3.getSelectedValue().toString();
+			}
+		});
+		
 		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(Color.PINK);
 		tabbedPane.addTab("Insert", null, panel_1, null);
 		panel_1.setLayout(null);
 		
@@ -283,7 +323,7 @@ public class GUI2 {
 		rdbtnOrderBy.setBounds(101, 319, 149, 23);
 		panel_1.add(rdbtnOrderBy);
 		
-		JRadioButton rdbtnSortBy = new JRadioButton("sort by");
+		JRadioButton rdbtnSortBy = new JRadioButton("select");
 		rdbtnSortBy.setBounds(281, 319, 149, 23);
 		panel_1.add(rdbtnSortBy);
 		
