@@ -21,10 +21,13 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JRadioButton;
 import java.awt.event.ItemListener;
+import java.sql.SQLException;
 import java.awt.event.ItemEvent;
 import java.awt.Color;
+import javax.swing.JTable;
 
 public class GUI2 {
 
@@ -41,8 +44,9 @@ public class GUI2 {
 	private String table;
 	private ArrayList<String> attr = new ArrayList<String>();
 	private int count;
-	private Object[] attrs;
+	private ArrayList<String> attrs;
 	private ArrayList<String> sections = new ArrayList<String>();
+	private JTable table_1;
 	
 
 	/**
@@ -63,8 +67,9 @@ public class GUI2 {
 
 	/**
 	 * Create the application.
+	 * @throws SQLException 
 	 */
-	public GUI2() {
+	public GUI2() throws SQLException {
 		handler = SQLHandler.getSQLHandler();
 		initialize();
 		
@@ -73,8 +78,9 @@ public class GUI2 {
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @throws SQLException 
 	 */
-	private void initialize() {
+	private void initialize() throws SQLException {
 		frame = new JFrame();
 		frame.setBackground(Color.WHITE);
 		frame.setBounds(100, 100, 771, 633);
@@ -104,6 +110,7 @@ public class GUI2 {
 		panel.add(scrollPane);
 		
 		JList list = new JList();
+		list.setBackground(Color.GREEN);
 		list.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
 				libraryFrom = list.getSelectedValue().toString();
@@ -127,6 +134,7 @@ public class GUI2 {
 		panel.add(scrollPane_1);
 		
 		JList list_1 = new JList();
+		list_1.setBackground(Color.GREEN);
 		list_1.setEnabled(false);
 		list_1.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
@@ -153,6 +161,7 @@ public class GUI2 {
 		panel.add(lblDateThrough);
 		
 		textField = new JTextField();
+		textField.setBackground(Color.GREEN);
 		textField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dateFrom = textField.getText();
@@ -163,6 +172,7 @@ public class GUI2 {
 		textField.setColumns(10);
 		
 		textField_1 = new JTextField();
+		textField_1.setBackground(Color.GREEN);
 		textField_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dateThru = textField_1.getText().toString();
@@ -181,6 +191,7 @@ public class GUI2 {
 		panel.add(scrollPane_2);
 		
 		JList list_2 = new JList();
+		list_2.setBackground(Color.GREEN);
 		list_2.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
 				provenanceFr = list_2.getSelectedValue().toString();
@@ -254,6 +265,7 @@ public class GUI2 {
 		panel.add(scrollPane_3);
 		
 		JList list_3 = new JList();
+		list_3.setBackground(Color.GREEN);
 		scrollPane_3.setViewportView(list_3);
 		list_3.setModel(new AbstractListModel() {
 			ArrayList<String> values = handler.populateList("SELECT provenanceID FROM Provenance");
@@ -284,22 +296,32 @@ public class GUI2 {
 		panel_1.add(lblSelectMethodOf);
 		
 		JLabel lblNewLabel = new JLabel("please select attributes");
-		lblNewLabel.setBounds(31, 170, 184, 15);
+		lblNewLabel.setBounds(27, 223, 184, 15);
 		panel_1.add(lblNewLabel);
 		
 		JComboBox comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"hello", "how ", "are ", "you"}));
-		comboBox.setBounds(135, 36, 502, 31);
-		panel_1.add(comboBox);
-		
-		JList list_4 = new JList();
-		list_4.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		list_4.addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent e) {
-				//@SuppressWarnings("deprecation")
-				attrs = list_4.getSelectedValues();
+		String[] tables = handler.getTables();
+		for(String table: tables) {
+			comboBox.addItem(table);
+		}
+		table = (String) comboBox.getSelectedItem();
+		//comboBox.setModel(new DefaultComboBoxModel(handler.getTables()));
+		//comboBox.addActionListener(new ActionListener() {
+			//public void actionPerformed(ActionEvent e) {
+				//table = (String) comboBox.getSelectedItem();
+			//}
+		//});
+		comboBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				table = (String) comboBox.getSelectedItem();
+				//JOptionPane.showMessageDialog(null, table);
+				
 			}
 		});
+		
+		comboBox.setBounds(135, 36, 502, 31);
+		panel_1.add(comboBox);
+		JList list_4 = new JList();
 		JCheckBox chckbxCheckIfYou = new JCheckBox("check if you want specific attributes of table");
 		chckbxCheckIfYou.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -331,34 +353,95 @@ public class GUI2 {
 		rdbtnGroupBy.setBounds(452, 319, 149, 23);
 		panel_1.add(rdbtnGroupBy);
 		
+		JScrollPane scrollPane_4 = new JScrollPane();
+		scrollPane_4.setBounds(209, 169, 443, 85);
+		panel_1.add(scrollPane_4);
+		
 		//JList list_4 = new JList();
-		list_4.setModel(new AbstractListModel() {
-			String[] values = new String[] {"make", "sure ", "to ", "select"};
-			public int getSize() {
-				return values.length;
-			}
-			public Object getElementAt(int index) {
-				return values[index];
+		scrollPane_4.setViewportView(list_4);
+		list_4.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		list_4.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				//@SuppressWarnings("deprecation")
+				attrs = handler.getAttributes(table);
 			}
 		});
-		list_4.setBounds(209, 169, 443, 85);
+		
+		//JList list_4 = new JList();
+		//attrs = handler.getAttributes(table);
+		
 		list_4.setEnabled(false);
-		panel_1.add(list_4);
+		
+		JScrollPane scrollPane_5 = new JScrollPane();
+		scrollPane_5.setBounds(186, 391, 546, 142);
+		panel_1.add(scrollPane_5);
+		
+		
+		table_1 = new JTable();
+		scrollPane_5.setViewportView(table_1);
+		
 		
 		JButton btnExecuteQuery = new JButton("Execute Query");
 		btnExecuteQuery.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String sen = "";
-				for(Object attribute: attrs) {
-					sen += (String)attribute;
-				}
-				String c = "count" + ' ' + count; 
-				JOptionPane.showMessageDialog(null, sen);
-				sen = "";
+			public void actionPerformed(ActionEvent e){
+				//String sen = "";
+				//for(Object attribute: attrs) {
+				//	sen += (String)attribute;
+				//}
+				//String c = "count" + ' ' + count; 
+				//JOptionPane.showMessageDialog(null, sen);
+				//sen = "";
+				
+				ListTableModel model;
+				//try {
+					try {
+						model = ListTableModel.createModelFromResultSet(handler.executeStructuredQuery("select", attrs, table, ""));
+						table_1.setModel(model);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					//table_1 = new JTable(model);
+					//table_1.setBounds(186, 391, 546, 142);
+					//panel_1.add(table_1);
+					
+				//} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					//e1.printStackTrace();
+				//}
+				
+				
+				
+				
+				
+				
 			}
 		});
-		btnExecuteQuery.setBounds(263, 416, 198, 25);
+		
+		
+		
+		btnExecuteQuery.setBounds(12, 447, 164, 25);
 		panel_1.add(btnExecuteQuery);
+		
+		JButton btnLoadAttributes = new JButton("Load Attributes");
+		btnLoadAttributes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DefaultListModel dlm = new DefaultListModel();
+				ArrayList<String> values = handler.getAttributes(table);
+				//ListTableModel model = ListTableModel.createModelFromResultSet(handler.executeStructuredQuery("select", attrs, table, ""));
+				for(String value: values) {
+					dlm.addElement(value);
+				}
+				list_4.setModel(dlm);
+				
+			}
+		});
+		btnLoadAttributes.setBounds(56, 186, 117, 25);
+		panel_1.add(btnLoadAttributes);
+		
+		//String[] attributes = new String[attrs.size()];
+		//attrs.toArray(attributes);
+		
 		
 		JPanel panel_2 = new JPanel();
 		tabbedPane.addTab("New tab", null, panel_2, null);
