@@ -12,8 +12,8 @@ import java.util.HashMap;
  * 
  * Modifications: Adopted the Singleton Design Pattern (3/21)
  * 
- * @author Brian Freeman
- * @version 1.0
+ * @author Brian Freeman with Framework by Michael Norton
+ * @version 1.1
  *
  */
 public class SQLHandler
@@ -27,6 +27,7 @@ public class SQLHandler
 	/**
 	 * constructor - Open the MySQL driver & make a connection & a default
 	 * statement object
+	 * we also now populate a mapping that will be useful later.
 	 * 
 	 * @param db
 	 * @param user
@@ -80,6 +81,11 @@ public class SQLHandler
 		
 	}
 	
+	/**
+	 * A generic populate, to convert a single column result into an arraylist of the the attributes
+	 * @param query a standard non protected sql query
+	 * @return the ArrayList created
+	 */
 	public ArrayList<String> populateList(String query) {
 		{
 			ResultSet rs = null;
@@ -105,6 +111,16 @@ public class SQLHandler
 		}	
 	}
 	
+	/**
+	 * The method behind the Section search pane of the Gui
+	 * @param libraryFrom library from, in the absence of libraryTo it is set as a match to libSiglum
+	 * @param LibraryTo the end of our between statement
+	 * @param dateFrom the first date in a between qualifier
+	 * @param dateTo
+	 * @param provenance1
+	 * @param provenance2
+	 * @return
+	 */
 	public ArrayList<String> executePane1(String libraryFrom, String LibraryTo, String dateFrom, String dateTo, String provenance1, String provenance2) {
 		
 			ResultSet rs = null;
@@ -170,35 +186,41 @@ public class SQLHandler
 			return returnList;	
 	}
 	
-	public ArrayList<String[]> executeStructuredQuery(String selOrBy, String[] attributes , String table, String extra) {
+	public ResultSet executeStructuredQuery(String selOrBy, ArrayList<String> attributes , String table, String extra) {
 		
 			ResultSet rs = null;
 			ArrayList<String[]> returner = new ArrayList<String[]>();
-			String tables = queryString(attributes);
-			String query =  selOrBy + " " + tables + " FROM " + table + " " + extra;
+			String butes;
+			if (attributes == null) {
+			butes = "*";
+			}
+			else {
+			butes = queryString(attributes);
+			}
+			String query =  selOrBy + " " + butes + " FROM " + table + " " + extra;
 			try
 			{
 				rs = stmt.executeQuery(query);
-				while  (rs.next()) {
-					
-					String[] entry = new String[attributes.length];
-					
-					for (int i = 1; i <= attributes.length; i++) {
-						entry[i - 1] = rs.getString(i);
-					}
-					
-					returner.add(entry);
-				}
+//				while  (rs.next()) {
+//					
+//					String[] entry = new String[attributes.length];
+//					
+//					for (int i = 1; i <= attributes.length; i++) {
+//						entry[i - 1] = rs.getString(i);
+//					}
+//					
+//					returner.add(entry);
+//				}
 				
 			} // end try
 			
 			catch ( SQLException e)
 			{
 				handleSQLError( e, query );
-			
+				
 			} // end catch
 			
-			return returner;	
+			return rs;	
 	}
 	
 	/**
@@ -453,7 +475,7 @@ public class SQLHandler
 		ResultSet rs = null;
 		ArrayList<String> returner = new ArrayList<String>();
 		rs = this.executeQuery("SELECT * from " + table);
-		for (int i = 1; i < this.getNumColumns(rs); i++) {
+		for (int i = 1; i <= this.getNumColumns(rs); i++) {
 			returner.add(this.getHeading(rs, i));
 		}
 		return returner;
@@ -466,16 +488,16 @@ public class SQLHandler
 	}
 
 	
-	public String queryString(String[] at) {
-		if (at.length == 1) {
-			return at[0];
+	public String queryString(ArrayList<String> at) {
+		if (at.size() == 1) {
+			return at.get(0);
 		}
 		String returner = "";
-		for(int i = 0; i < at.length - 1;i++) {
-			returner +=at[i];
+		for(int i = 0; i < at.size() - 1;i++) {
+			returner +=at.get(i);
 			returner += ", ";
 		}
-		returner += at[at.length - 1];
+		returner += at.get(at.size() - 1);
 		return returner;
 	}
 	
