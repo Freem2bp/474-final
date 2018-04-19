@@ -1,4 +1,4 @@
-package sql_project;
+package db;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -120,7 +120,7 @@ public class SQLHandler
 			if (LibraryTo == null && dateFrom != null) {
 				query = "Select CONCAT(libSiglum,' ',msSiglum) AS siglum, liturgicalOccasion, date, provenanceID From Section where (libSiglum = '" + libSiglum1 + "') "
 						+ "AND (date BETWEEN '" + dateFrom + "' AND '" + dateTo + "') AND (provenanceID = '" + provenance1 + "')" ;
-			} else if(dateFrom == null || dateTo == null) {
+			} else if(dateFrom == null  || dateFrom.equals("") || dateTo == null || dateTo.equals("")) {
 				query = "Select CONCAT(libSiglum,' ',msSiglum) AS siglum, liturgicalOccasion, date, provenanceID From Section where (libSiglum = '" + libSiglum1 + "') "
 						+ "AND (provenanceID = '" + provenance1 + "')" ;  
 			} else {
@@ -170,15 +170,26 @@ public class SQLHandler
 			return returnList;	
 	}
 	
-	public ResultSet executeStructuredQuery(String selOrBy, String[] attributes, String table, String extra) {
+	public ArrayList<String[]> executeStructuredQuery(String selOrBy, String[] attributes , String table, String extra) {
 		
 			ResultSet rs = null;
+			ArrayList<String[]> returner = new ArrayList<String[]>();
 			String tables = queryString(attributes);
 			String query =  selOrBy + " " + tables + " FROM " + table + " " + extra;
 			try
 			{
 				rs = stmt.executeQuery(query);
-			
+				while  (rs.next()) {
+					
+					String[] entry = new String[attributes.length];
+					
+					for (int i = 1; i <= attributes.length; i++) {
+						entry[i - 1] = rs.getString(i);
+					}
+					
+					returner.add(entry);
+				}
+				
 			} // end try
 			
 			catch ( SQLException e)
@@ -187,7 +198,7 @@ public class SQLHandler
 			
 			} // end catch
 			
-			return rs;	
+			return returner;	
 	}
 	
 	/**
@@ -437,9 +448,25 @@ public class SQLHandler
 		Collections.sort(returner);
 		return returner;
 	}
+	
+	public ArrayList<String> getAttributes(String table) {
+		ResultSet rs = null;
+		ArrayList<String> returner = new ArrayList<String>();
+		rs = this.executeQuery("SELECT * from " + table);
+		for (int i = 1; i < this.getNumColumns(rs); i++) {
+			returner.add(this.getHeading(rs, i));
+		}
+		return returner;
+		
+	}
+	
+	public String[] getTables() {
+		String[] returner = {"Century", "Chant", "Country", "Cursus", "Feast", "Genre", "Illumination", "IlluminationType", "Initial", "Leaf", "Library", "Manuscript", "MasterChant", "Melody", "MSType", "Notation", "Office", "Provenance", "Section", "SourceCompleteness" };
+	return returner;
+	}
 
 	
-	private String queryString(String[] at) {
+	public String queryString(String[] at) {
 		if (at.length == 1) {
 			return at[0];
 		}
