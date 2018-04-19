@@ -47,6 +47,7 @@ public class GUI2 {
 	private ArrayList<String> attrs;
 	private ArrayList<String> sections = new ArrayList<String>();
 	private JTable table_1;
+	private ArrayList<String> selected = new ArrayList<String>();
 	
 
 	/**
@@ -364,8 +365,17 @@ public class GUI2 {
 			public void valueChanged(ListSelectionEvent e) {
 				//@SuppressWarnings("deprecation")
 				attrs = handler.getAttributes(table);
+				Object[] selectAttr = list_4.getSelectedValues();
+				selected = new ArrayList<String>();
+				for (int i = 0; i < selectAttr.length; i++) {
+					if(!selected.contains((String) selectAttr[i])) {
+						selected.add((String) selectAttr[i]);
+					}
+				}
+				
 			}
 		});
+		
 		
 		//JList list_4 = new JList();
 		//attrs = handler.getAttributes(table);
@@ -395,7 +405,7 @@ public class GUI2 {
 				ListTableModel model;
 				//try {
 					try {
-						model = ListTableModel.createModelFromResultSet(handler.executeStructuredQuery("select", attrs, table, ""));
+						model = ListTableModel.createModelFromResultSet(handler.executeStructuredQuery("select", selected, table, ""));
 						table_1.setModel(model);
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
