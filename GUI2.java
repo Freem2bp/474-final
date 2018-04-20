@@ -48,6 +48,9 @@ public class GUI2 {
 	private ArrayList<String> sections = new ArrayList<String>();
 	private JTable table_1;
 	private ArrayList<String> selected = new ArrayList<String>();
+	private String selOrBy;
+	private String all = "*";
+
 	
 
 	/**
@@ -339,6 +342,7 @@ public class GUI2 {
 				}
 				else {
 					list_4.setEnabled(false);
+					
 				}
 			}
 		});
@@ -351,16 +355,33 @@ public class GUI2 {
 		panel_1.add(chckbxCheckIfYou);
 		
 		JRadioButton rdbtnOrderBy = new JRadioButton("order by");
+		rdbtnOrderBy.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				selOrBy = rdbtnOrderBy.getText(); 
+			}
+		});
 		rdbtnOrderBy.setBackground(new Color(147, 112, 219));
 		rdbtnOrderBy.setBounds(33, 260, 149, 23);
 		panel_1.add(rdbtnOrderBy);
 		
 		JRadioButton rdbtnSortBy = new JRadioButton("select");
+		rdbtnSortBy.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				selOrBy = rdbtnSortBy.getText();
+			}
+		});
 		rdbtnSortBy.setBackground(new Color(147, 112, 219));
 		rdbtnSortBy.setBounds(274, 260, 149, 23);
 		panel_1.add(rdbtnSortBy);
 		
 		JRadioButton rdbtnGroupBy = new JRadioButton("group by");
+		rdbtnGroupBy.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				selOrBy = rdbtnGroupBy.getText();
+			}
+		});
+		
+		
 		rdbtnGroupBy.setBackground(new Color(147, 112, 219));
 		rdbtnGroupBy.setBounds(518, 260, 149, 23);
 		panel_1.add(rdbtnGroupBy);
@@ -406,37 +427,14 @@ public class GUI2 {
 		JButton btnExecuteQuery = new JButton("Execute Query");
 		btnExecuteQuery.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
-				//String sen = "";
-				//for(Object attribute: attrs) {
-				//	sen += (String)attribute;
-				//}
-				//String c = "count" + ' ' + count; 
-				//JOptionPane.showMessageDialog(null, sen);
-				//sen = "";
-				
 				ListTableModel model;
-				//try {
 					try {
-						model = ListTableModel.createModelFromResultSet(handler.executeStructuredQuery("select", selected, table, ""));
+						model = ListTableModel.createModelFromResultSet(handler.executeStructuredQuery(selOrBy, selected, table, ""));
 						table_1.setModel(model);
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					//table_1 = new JTable(model);
-					//table_1.setBounds(186, 391, 546, 142);
-					//panel_1.add(table_1);
-					
-				//} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					//e1.printStackTrace();
-				//}
-				
-				
-				
-				
-				
-				
 			}
 		});
 		
