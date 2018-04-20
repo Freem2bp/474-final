@@ -31,7 +31,7 @@ import javax.swing.JTable;
 
 public class GUI2 {
 
-	private JFrame frame;
+	private JFrame Manuscript_GUI;
 	private JTextField textField;
 	private JTextField textField_1;
 	private String libraryFrom;
@@ -58,7 +58,7 @@ public class GUI2 {
 			public void run() {
 				try {
 					GUI2 window = new GUI2();
-					window.frame.setVisible(true);
+					window.Manuscript_GUI.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -82,20 +82,21 @@ public class GUI2 {
 	 * @throws SQLException 
 	 */
 	private void initialize() throws SQLException {
-		frame = new JFrame();
-		frame.setBackground(Color.WHITE);
-		frame.setBounds(100, 100, 771, 633);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		Manuscript_GUI = new JFrame();
+		Manuscript_GUI.setResizable(false);
+		Manuscript_GUI.setBackground(Color.WHITE);
+		Manuscript_GUI.setBounds(100, 100, 771, 633);
+		Manuscript_GUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		Manuscript_GUI.getContentPane().setLayout(null);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBackground(Color.CYAN);
 		tabbedPane.setBounds(12, 12, 749, 572);
-		frame.getContentPane().add(tabbedPane);
+		Manuscript_GUI.getContentPane().add(tabbedPane);
 		
 		JPanel panel = new JPanel();
-		panel.setBackground(Color.ORANGE);
-		tabbedPane.addTab("Load Info", null, panel, null);
+		panel.setBackground(new Color(147, 112, 219));
+		tabbedPane.addTab("Load Section", null, panel, null);
 		panel.setLayout(null);
 		
 		JLabel lblLibraryFrom = new JLabel("Library From");
@@ -111,7 +112,7 @@ public class GUI2 {
 		panel.add(scrollPane);
 		
 		JList list = new JList();
-		list.setBackground(Color.GREEN);
+		list.setBackground(new Color(255, 240, 245));
 		list.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
 				libraryFrom = list.getSelectedValue().toString();
@@ -135,7 +136,7 @@ public class GUI2 {
 		panel.add(scrollPane_1);
 		
 		JList list_1 = new JList();
-		list_1.setBackground(Color.GREEN);
+		list_1.setBackground(new Color(255, 240, 245));
 		list_1.setEnabled(false);
 		list_1.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
@@ -153,46 +154,46 @@ public class GUI2 {
 			}
 		});
 		
-		JLabel lblDateFrom = new JLabel("Century From ");
-		lblDateFrom.setBounds(23, 291, 107, 15);
+		JLabel lblDateFrom = new JLabel("Date From ");
+		lblDateFrom.setBounds(23, 268, 107, 15);
 		panel.add(lblDateFrom);
 		
-		JLabel lblDateThrough = new JLabel("Century Thru");
-		lblDateThrough.setBounds(387, 291, 107, 15);
+		JLabel lblDateThrough = new JLabel("Date Thru");
+		lblDateThrough.setBounds(385, 268, 107, 15);
 		panel.add(lblDateThrough);
 		
 		textField = new JTextField();
-		textField.setBackground(Color.GREEN);
+		textField.setBackground(new Color(255, 240, 245));
 		textField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dateFrom = textField.getText();
 			}
 		});
-		textField.setBounds(134, 289, 116, 19);
+		textField.setBounds(144, 266, 116, 19);
 		panel.add(textField);
 		textField.setColumns(10);
 		
 		textField_1 = new JTextField();
-		textField_1.setBackground(Color.GREEN);
+		textField_1.setBackground(new Color(255, 240, 245));
 		textField_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dateThru = textField_1.getText().toString();
 			}
 		});
-		textField_1.setBounds(491, 289, 114, 19);
+		textField_1.setBounds(491, 266, 114, 19);
 		panel.add(textField_1);
 		textField_1.setColumns(10);
 		
-		JLabel lblProvenance = new JLabel("Provenance");
-		lblProvenance.setBounds(23, 351, 96, 15);
+		JLabel lblProvenance = new JLabel("Provenance From");
+		lblProvenance.setBounds(23, 331, 143, 15);
 		panel.add(lblProvenance);
 		
 		JScrollPane scrollPane_2 = new JScrollPane();
-		scrollPane_2.setBounds(129, 349, 476, 49);
+		scrollPane_2.setBounds(184, 315, 471, 72);
 		panel.add(scrollPane_2);
 		
 		JList list_2 = new JList();
-		list_2.setBackground(Color.GREEN);
+		list_2.setBackground(new Color(255, 240, 245));
 		list_2.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
 				provenanceFr = list_2.getSelectedValue().toString();
@@ -226,10 +227,13 @@ public class GUI2 {
 				for(String section: sections) {
 					JOptionPane.showMessageDialog(null, section , "Section Information", JOptionPane.INFORMATION_MESSAGE);
 					int dialogButton = JOptionPane.YES_NO_OPTION;
-				    int dialogResult = JOptionPane.showConfirmDialog (null, "Would You Like to see the next section?","Continue?",dialogButton);
-				    if (dialogResult == JOptionPane.NO_OPTION) {
-				    	break;
-				    }
+					if(sections.indexOf(section) != sections.size() - 1) {
+						int dialogResult = JOptionPane.showConfirmDialog (null, "Would You Like to see the next section?","Continue?",dialogButton);
+					    if (dialogResult == JOptionPane.NO_OPTION) {
+					    	break;
+					    }
+					}
+				    
 				}
 				
 				
@@ -237,10 +241,11 @@ public class GUI2 {
 				
 			}
 		});
-		btnNewButton.setBounds(305, 486, 117, 25);
+		btnNewButton.setBounds(312, 508, 117, 25);
 		panel.add(btnNewButton);
 		
 		JCheckBox chckbxEnable = new JCheckBox("Enable");
+		chckbxEnable.setBackground(new Color(147, 112, 219));
 		chckbxEnable.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if(chckbxEnable.isSelected()) {
@@ -253,8 +258,8 @@ public class GUI2 {
 		chckbxEnable.setBounds(613, 175, 129, 23);
 		panel.add(chckbxEnable);
 		
-		JLabel label = new JLabel("(0-9999)");
-		label.setBounds(267, 291, 70, 15);
+		JLabel label = new JLabel("(0-2018)");
+		label.setBounds(290, 268, 70, 15);
 		panel.add(label);
 		
 		JLabel lblProvenanceThru = new JLabel("Provenance Thru");
@@ -262,11 +267,11 @@ public class GUI2 {
 		panel.add(lblProvenanceThru);
 		
 		JScrollPane scrollPane_3 = new JScrollPane();
-		scrollPane_3.setBounds(151, 410, 458, 49);
+		scrollPane_3.setBounds(184, 416, 471, 72);
 		panel.add(scrollPane_3);
 		
 		JList list_3 = new JList();
-		list_3.setBackground(Color.GREEN);
+		list_3.setBackground(new Color(255, 240, 245));
 		scrollPane_3.setViewportView(list_3);
 		list_3.setModel(new AbstractListModel() {
 			ArrayList<String> values = handler.populateList("SELECT provenanceID FROM Provenance");
@@ -284,8 +289,8 @@ public class GUI2 {
 		});
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBackground(Color.PINK);
-		tabbedPane.addTab("Insert", null, panel_1, null);
+		panel_1.setBackground(new Color(147, 112, 219));
+		tabbedPane.addTab("Query", null, panel_1, null);
 		panel_1.setLayout(null);
 		
 		JLabel lblSelectTable = new JLabel("Select Table");
@@ -293,14 +298,15 @@ public class GUI2 {
 		panel_1.add(lblSelectTable);
 		
 		JLabel lblSelectMethodOf = new JLabel("Select method of display");
-		lblSelectMethodOf.setBounds(33, 283, 178, 15);
+		lblSelectMethodOf.setBounds(35, 237, 178, 15);
 		panel_1.add(lblSelectMethodOf);
 		
-		JLabel lblNewLabel = new JLabel("please select attributes");
-		lblNewLabel.setBounds(27, 223, 184, 15);
+		JLabel lblNewLabel = new JLabel("select attributes");
+		lblNewLabel.setBounds(32, 175, 130, 15);
 		panel_1.add(lblNewLabel);
 		
 		JComboBox comboBox = new JComboBox();
+		comboBox.setBackground(new Color(255, 240, 245));
 		String[] tables = handler.getTables();
 		for(String table: tables) {
 			comboBox.addItem(table);
@@ -323,7 +329,9 @@ public class GUI2 {
 		comboBox.setBounds(135, 36, 502, 31);
 		panel_1.add(comboBox);
 		JList list_4 = new JList();
+		list_4.setBackground(new Color(255, 240, 245));
 		JCheckBox chckbxCheckIfYou = new JCheckBox("check if you want specific attributes of table");
+		chckbxCheckIfYou.setBackground(new Color(147, 112, 219));
 		chckbxCheckIfYou.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if(chckbxCheckIfYou.isSelected()) {
@@ -343,19 +351,22 @@ public class GUI2 {
 		panel_1.add(chckbxCheckIfYou);
 		
 		JRadioButton rdbtnOrderBy = new JRadioButton("order by");
-		rdbtnOrderBy.setBounds(101, 319, 149, 23);
+		rdbtnOrderBy.setBackground(new Color(147, 112, 219));
+		rdbtnOrderBy.setBounds(33, 260, 149, 23);
 		panel_1.add(rdbtnOrderBy);
 		
 		JRadioButton rdbtnSortBy = new JRadioButton("select");
-		rdbtnSortBy.setBounds(281, 319, 149, 23);
+		rdbtnSortBy.setBackground(new Color(147, 112, 219));
+		rdbtnSortBy.setBounds(274, 260, 149, 23);
 		panel_1.add(rdbtnSortBy);
 		
 		JRadioButton rdbtnGroupBy = new JRadioButton("group by");
-		rdbtnGroupBy.setBounds(452, 319, 149, 23);
+		rdbtnGroupBy.setBackground(new Color(147, 112, 219));
+		rdbtnGroupBy.setBounds(518, 260, 149, 23);
 		panel_1.add(rdbtnGroupBy);
 		
 		JScrollPane scrollPane_4 = new JScrollPane();
-		scrollPane_4.setBounds(209, 169, 443, 85);
+		scrollPane_4.setBounds(180, 141, 457, 84);
 		panel_1.add(scrollPane_4);
 		
 		//JList list_4 = new JList();
@@ -383,11 +394,12 @@ public class GUI2 {
 		list_4.setEnabled(false);
 		
 		JScrollPane scrollPane_5 = new JScrollPane();
-		scrollPane_5.setBounds(186, 391, 546, 142);
+		scrollPane_5.setBounds(33, 328, 699, 205);
 		panel_1.add(scrollPane_5);
 		
 		
 		table_1 = new JTable();
+		table_1.setBackground(new Color(255, 240, 245));
 		scrollPane_5.setViewportView(table_1);
 		
 		
@@ -430,7 +442,7 @@ public class GUI2 {
 		
 		
 		
-		btnExecuteQuery.setBounds(12, 447, 164, 25);
+		btnExecuteQuery.setBounds(33, 291, 164, 25);
 		panel_1.add(btnExecuteQuery);
 		
 		JButton btnLoadAttributes = new JButton("Load Attributes");
@@ -446,7 +458,7 @@ public class GUI2 {
 				
 			}
 		});
-		btnLoadAttributes.setBounds(56, 186, 117, 25);
+		btnLoadAttributes.setBounds(27, 138, 117, 25);
 		panel_1.add(btnLoadAttributes);
 		
 		//String[] attributes = new String[attrs.size()];
