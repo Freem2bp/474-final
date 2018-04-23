@@ -14,6 +14,8 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
+
+import javax.imageio.ImageIO;
 import javax.swing.AbstractListModel;
 import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionListener;
@@ -22,13 +24,18 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
-import javax.swing.JRadioButton;
+import javax.swing.ImageIcon;
+
 import java.awt.event.ItemListener;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.awt.event.ItemEvent;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.JTable;
 import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.Image;
 
 
 
@@ -85,8 +92,9 @@ public class GUI {
 	/**
 	 * Create the application.
 	 * @throws SQLException 
+	 * @throws IOException 
 	 */
-	public GUI() throws SQLException {
+	public GUI() throws SQLException, IOException {
 		handler = SQLHandler.getSQLHandler(); //establish connection with the server and crete a handler object to use for query
 		initialize();	
 	}
@@ -94,9 +102,10 @@ public class GUI {
 	/**
 	 * Initialize the contents of the frame.
 	 * @throws SQLException 
+	 * @throws IOException 
 	 */
 	@SuppressWarnings("unchecked")
-	private void initialize() throws SQLException {
+	private void initialize() throws SQLException, IOException {
 		Manuscript_GUI = new JFrame();
 		Manuscript_GUI.setResizable(false);
 		Manuscript_GUI.setBackground(Color.WHITE);
@@ -104,16 +113,28 @@ public class GUI {
 		Manuscript_GUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Manuscript_GUI.getContentPane().setLayout(null);
 		
+		
+		
+		
 		//create a tabbed pane to hold two tabs: one for query and one for loading sections
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBackground(Color.CYAN);
 		tabbedPane.setBounds(12, 12, 787, 770);
 		Manuscript_GUI.getContentPane().add(tabbedPane);
 		
+		
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////panel 1, sections code/////////////////////////////////////////////////////
+		Image image1 = ImageIO.read(getClass().getResource("now.jpg"));
+		Image image2 = ImageIO.read(getClass().getResource("a.jpg"));
 		
-		JPanel sectionPanel = new JPanel();
+		BackgroundPanel panel =
+			    new BackgroundPanel(image1, BackgroundPanel.SCALED);
+			GradientPaint paint =
+			    new GradientPaint(0, 0, Color.BLUE, 600, 0, Color.RED);
+			panel.setPaint(paint);
+		
+		JPanel sectionPanel = panel;
 		sectionPanel.setBackground(new Color(147, 112, 219));
 		tabbedPane.addTab("Load Section", null, sectionPanel, null);
 		sectionPanel.setLayout(null);
@@ -195,7 +216,7 @@ public class GUI {
 		//make libraryThru list selectable
 		JCheckBox chckbxEnable = new JCheckBox("Library Thru");
 		chckbxEnable.setFont(new Font("eufm10", Font.BOLD, 16));
-		chckbxEnable.setBackground(new Color(147, 112, 219));
+		chckbxEnable.setBackground(Color.WHITE);
 		chckbxEnable.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if(chckbxEnable.isSelected()) {
@@ -353,8 +374,13 @@ public class GUI {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////panel 2, query code/////////////////////////////////////////////////////
 		
+		BackgroundPanel panel2 =
+			    new BackgroundPanel(image2, BackgroundPanel.SCALED);
+			GradientPaint paint2 =
+			    new GradientPaint(0, 0, Color.BLUE, 600, 0, Color.RED);
+			panel.setPaint(paint2);
 		
-		JPanel QueryPanel = new JPanel();
+		JPanel QueryPanel = panel2;
 		QueryPanel.setBackground(new Color(147, 112, 219));
 		tabbedPane.addTab("Query", null, QueryPanel, null);
 		QueryPanel.setLayout(null);
@@ -399,7 +425,7 @@ public class GUI {
 		selectAttrsList.setBackground(new Color(255, 240, 245));
 		JCheckBox chckbxCheckIfYou = new JCheckBox("select attributes");
 		chckbxCheckIfYou.setFont(new Font("eufm10", Font.BOLD, 16));
-		chckbxCheckIfYou.setBackground(new Color(147, 112, 219));
+		chckbxCheckIfYou.setBackground(Color.WHITE);
 		
 		/**
 		 * activate the attributes list only when the user wants to see it 
@@ -560,7 +586,7 @@ public class GUI {
 				}
 			}
 		});
-		chckbxWhereEnabled.setBackground(new Color(147, 112, 219));
+		chckbxWhereEnabled.setBackground(Color.WHITE);
 		chckbxWhereEnabled.setBounds(33, 243, 164, 23);
 		QueryPanel.add(chckbxWhereEnabled);
 		
