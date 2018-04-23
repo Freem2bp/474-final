@@ -71,6 +71,9 @@ public class GUI {
 	private String oneAttr;
 	private String criteria;
 	private String qualifier;
+	private ArrayList<String> qAttrs = new ArrayList<String>();
+	private ArrayList<String> criterion = new ArrayList<String>();
+	private ArrayList<String> qualifiers = new ArrayList<String>();
 	
 
 	/**
@@ -518,6 +521,7 @@ public class GUI {
 		selectedAttributeBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				oneAttr = (String) selectedAttributeBox.getSelectedItem();
+				
 			}
 		});
 		selectedAttributeBox.setBounds(164, 286, 606, 24);
@@ -533,6 +537,7 @@ public class GUI {
 		RelatoinBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				qualifier = (String) RelatoinBox.getSelectedItem();
+				
 			}
 		});
 		
@@ -594,6 +599,7 @@ public class GUI {
 		////////////////////Button for getting the query and producing the table///////////////////
 		JButton btnExecuteQuery = new JButton("Execute Query");
 		btnExecuteQuery.setFont(new Font("eufm10", Font.BOLD, 16));
+		JButton btnAddWhere = new JButton("Add where");
 		/**
 		 * this listener uses ListTableModel.java and RowTableModel.java which were obtained as an outside source.
 		 * they are used to transform a result set from the database and turn in into a table
@@ -612,7 +618,10 @@ public class GUI {
 						if(selectedAttributeBox.isEnabled()) {
 							//executeStructuredQuery will produce the result set and pass it to createModelFromResultSet
 							model = ListTableModel.createModelFromResultSet(handler.executeStructuredQuery(selected, table,oneAttr, qualifier, criteria));
-						} else {
+						} else if(btnAddWhere.isEnabled()) {
+							model = ListTableModel.createModelFromResultSet(handler.executeStructuredQuery(selected, table,qAttrs, qualifiers, criterion));
+						}
+						else {
 							//simpler version without the where clause
 							model = ListTableModel.createModelFromResultSet(handler.executeStructuredQuery(selected, table));
 						}
@@ -627,6 +636,42 @@ public class GUI {
 		});
 		btnExecuteQuery.setBounds(12, 435, 164, 25);
 		QueryPanel.add(btnExecuteQuery);
+		
+		
+		btnAddWhere.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				qualifiers.add(qualifier);
+				qAttrs.add(oneAttr);
+				criterion.add(criteria);
+				for(String qualifier: qualifiers)
+					JOptionPane.showMessageDialog(null, qualifier);
+				for(String a: qAttrs)
+					JOptionPane.showMessageDialog(null, a);
+				for(String c: criterion)
+					JOptionPane.showMessageDialog(null, c);
+				
+			}
+		});
+		btnAddWhere.setBounds(398, 435, 117, 25);
+		btnAddWhere.setEnabled(false);
+		panel2.add(btnAddWhere);
+		
+		JCheckBox chckbxCheckIfU = new JCheckBox("check if u want more than one where");
+		chckbxCheckIfU.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if(chckbxCheckIfU.isSelected()) {
+					btnAddWhere.setEnabled(true);
+				}
+				else {
+					btnAddWhere.setEnabled(false);
+					qualifiers = new ArrayList<String>();
+					qAttrs = new ArrayList<String>();
+					criterion = new ArrayList<String>();
+				}
+			}
+		});
+		chckbxCheckIfU.setBounds(365, 242, 293, 23);
+		panel2.add(chckbxCheckIfU);
 		
 		
 	}
