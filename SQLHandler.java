@@ -192,6 +192,7 @@ public class SQLHandler
 	 * @param criteria the search 
 	 * @return a resultset formed from the query
 	 *  reads as {"chantID" "FeastID}, Chant, leafNumber, Ends With, r 
+	 *   somewhat injection safe, you need to know what im doing under the hood to escape need something like "'%' OR 1=1  AND feastID like '%" 
 	 */
 	public ResultSet executeStructuredQuery(ArrayList<String> attributes , String table, String qualifierAtt, String qualifier, String criteria) {
 		
