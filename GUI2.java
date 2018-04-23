@@ -92,17 +92,18 @@ public class GUI2 {
 	 * Initialize the contents of the frame.
 	 * @throws SQLException 
 	 */
+	@SuppressWarnings("unchecked")
 	private void initialize() throws SQLException {
 		Manuscript_GUI = new JFrame();
 		Manuscript_GUI.setResizable(false);
 		Manuscript_GUI.setBackground(Color.WHITE);
-		Manuscript_GUI.setBounds(100, 100, 775, 724);
+		Manuscript_GUI.setBounds(100, 100, 813, 820);
 		Manuscript_GUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Manuscript_GUI.getContentPane().setLayout(null);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBackground(Color.CYAN);
-		tabbedPane.setBounds(12, 12, 749, 674);
+		tabbedPane.setBounds(12, 12, 787, 770);
 		Manuscript_GUI.getContentPane().add(tabbedPane);
 		
 		JPanel panel = new JPanel();
@@ -111,15 +112,11 @@ public class GUI2 {
 		panel.setLayout(null);
 		
 		JLabel lblLibraryFrom = new JLabel("Library From");
-		lblLibraryFrom.setBounds(23, 29, 107, 15);
+		lblLibraryFrom.setBounds(25, 72, 107, 15);
 		panel.add(lblLibraryFrom);
 		
-		JLabel lblLibrarythru = new JLabel("Library Thru");
-		lblLibrarythru.setBounds(23, 143, 121, 15);
-		panel.add(lblLibrarythru);
-		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(134, 28, 471, 92);
+		scrollPane.setBounds(134, 28, 608, 92);
 		panel.add(scrollPane);
 		
 		JList<String> list = new JList<String>();
@@ -145,7 +142,7 @@ public class GUI2 {
 		});
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(134, 141, 471, 104);
+		scrollPane_1.setBounds(134, 177, 608, 104);
 		panel.add(scrollPane_1);
 		
 		JList list_1 = new JList();
@@ -157,21 +154,25 @@ public class GUI2 {
 			}
 		});
 		scrollPane_1.setViewportView(list_1);
-		list_1.setModel(new AbstractListModel() {
+		list_1.setModel(new AbstractListModel<String>() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 			public int getSize() {
 				return libraries.size();
 			}
-			public Object getElementAt(int index) {
+			public String getElementAt(int index) {
 				return libraries.get(index);
 			}
 		});
 		
 		JLabel lblDateFrom = new JLabel("Date From ");
-		lblDateFrom.setBounds(23, 268, 107, 15);
+		lblDateFrom.setBounds(184, 327, 107, 15);
 		panel.add(lblDateFrom);
 		
 		JLabel lblDateThrough = new JLabel("Date Thru");
-		lblDateThrough.setBounds(385, 268, 107, 15);
+		lblDateThrough.setBounds(473, 327, 107, 15);
 		panel.add(lblDateThrough);
 		
 		textField = new JTextField();
@@ -181,7 +182,7 @@ public class GUI2 {
 				dateFrom = textField.getText();
 			}
 		});
-		textField.setBounds(144, 266, 116, 19);
+		textField.setBounds(264, 325, 117, 19);
 		panel.add(textField);
 		textField.setColumns(10);
 		
@@ -192,16 +193,16 @@ public class GUI2 {
 				dateThru = textField_1.getText().toString();
 			}
 		});
-		textField_1.setBounds(491, 266, 114, 19);
+		textField_1.setBounds(553, 325, 102, 19);
 		panel.add(textField_1);
 		textField_1.setColumns(10);
 		
 		JLabel lblProvenance = new JLabel("Provenance From");
-		lblProvenance.setBounds(23, 331, 143, 15);
+		lblProvenance.setBounds(23, 418, 143, 15);
 		panel.add(lblProvenance);
 		
 		JScrollPane scrollPane_2 = new JScrollPane();
-		scrollPane_2.setBounds(184, 315, 471, 72);
+		scrollPane_2.setBounds(184, 388, 471, 72);
 		panel.add(scrollPane_2);
 		
 		JList list_2 = new JList();
@@ -239,10 +240,10 @@ public class GUI2 {
 				}
 			}
 		});
-		btnNewButton.setBounds(312, 508, 117, 25);
+		btnNewButton.setBounds(314, 623, 201, 43);
 		panel.add(btnNewButton);
 		
-		JCheckBox chckbxEnable = new JCheckBox("Enable");
+		JCheckBox chckbxEnable = new JCheckBox("Library Thru");
 		chckbxEnable.setBackground(new Color(147, 112, 219));
 		chckbxEnable.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -253,19 +254,19 @@ public class GUI2 {
 				}
 			}
 		});
-		chckbxEnable.setBounds(613, 175, 129, 23);
+		chckbxEnable.setBounds(8, 223, 129, 23);
 		panel.add(chckbxEnable);
 		
 		JLabel label = new JLabel("(0-2018)");
-		label.setBounds(290, 268, 70, 15);
+		label.setBounds(391, 327, 70, 15);
 		panel.add(label);
 		
 		JLabel lblProvenanceThru = new JLabel("Provenance Thru");
-		lblProvenanceThru.setBounds(23, 430, 129, 15);
+		lblProvenanceThru.setBounds(23, 528, 129, 15);
 		panel.add(lblProvenanceThru);
 		
 		JScrollPane scrollPane_3 = new JScrollPane();
-		scrollPane_3.setBounds(184, 416, 471, 72);
+		scrollPane_3.setBounds(184, 499, 471, 72);
 		panel.add(scrollPane_3);
 		
 		JList list_3 = new JList();
@@ -292,16 +293,12 @@ public class GUI2 {
 		panel_1.setLayout(null);
 		
 		JLabel lblSelectTable = new JLabel("Select Table");
-		lblSelectTable.setBounds(33, 41, 120, 15);
+		lblSelectTable.setBounds(33, 44, 120, 15);
 		panel_1.add(lblSelectTable);
 		
 		JLabel lblSelectMethodOf = new JLabel("select attr");
-		lblSelectMethodOf.setBounds(32, 260, 178, 15);
+		lblSelectMethodOf.setBounds(33, 291, 178, 15);
 		panel_1.add(lblSelectMethodOf);
-		
-		JLabel lblNewLabel = new JLabel("select attributes");
-		lblNewLabel.setBounds(32, 175, 130, 15);
-		panel_1.add(lblNewLabel);
 		
 		JComboBox comboBox = new JComboBox();
 		comboBox.setBackground(new Color(255, 240, 245));
@@ -316,11 +313,11 @@ public class GUI2 {
 			}
 		});
 		
-		comboBox.setBounds(135, 36, 502, 31);
+		comboBox.setBounds(164, 36, 606, 31);
 		panel_1.add(comboBox);
 		JList list_4 = new JList();
 		list_4.setBackground(new Color(255, 240, 245));
-		JCheckBox chckbxCheckIfYou = new JCheckBox("check if you want specific attributes of table");
+		JCheckBox chckbxCheckIfYou = new JCheckBox("select attributes");
 		chckbxCheckIfYou.setBackground(new Color(147, 112, 219));
 		chckbxCheckIfYou.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -333,11 +330,11 @@ public class GUI2 {
 			}
 		});
 		
-		chckbxCheckIfYou.setBounds(186, 93, 378, 23);
+		chckbxCheckIfYou.setBounds(33, 167, 145, 23);
 		panel_1.add(chckbxCheckIfYou);
 		
 		JScrollPane scrollPane_4 = new JScrollPane();
-		scrollPane_4.setBounds(180, 141, 457, 84);
+		scrollPane_4.setBounds(180, 141, 590, 84);
 		panel_1.add(scrollPane_4);
 		
 		scrollPane_4.setViewportView(list_4);
@@ -360,7 +357,7 @@ public class GUI2 {
 		list_4.setEnabled(false);
 		
 		JScrollPane scrollPane_5 = new JScrollPane();
-		scrollPane_5.setBounds(33, 430, 699, 205);
+		scrollPane_5.setBounds(12, 472, 758, 259);
 		panel_1.add(scrollPane_5);
 		
 		
@@ -388,7 +385,7 @@ public class GUI2 {
 				
 			}
 		});
-		btnLoadAttributes.setBounds(27, 138, 117, 25);
+		btnLoadAttributes.setBounds(33, 115, 117, 25);
 		panel_1.add(btnLoadAttributes);
 		
 		ArrayList<String> values = handler.getAttributes(table);
@@ -400,7 +397,7 @@ public class GUI2 {
 				oneAttr = (String) comboBox_2.getSelectedItem();
 			}
 		});
-		comboBox_2.setBounds(181, 255, 456, 24);
+		comboBox_2.setBounds(164, 286, 606, 24);
 		comboBox_2.setEnabled(false);
 		panel_1.add(comboBox_2);
 		
@@ -414,12 +411,12 @@ public class GUI2 {
 			}
 		});
 		
-		comboBox_3.setBounds(180, 306, 457, 23);
+		comboBox_3.setBounds(164, 336, 606, 23);
 		comboBox_3.setEnabled(false);
 		panel_1.add(comboBox_3);
 		
 		JLabel lblSelectndAttr = new JLabel("relation");
-		lblSelectndAttr.setBounds(33, 310, 120, 15);
+		lblSelectndAttr.setBounds(33, 340, 120, 15);
 		panel_1.add(lblSelectndAttr);
 		
 		textField_2 = new JTextField();
@@ -428,12 +425,12 @@ public class GUI2 {
 				criteria = textField_2.getText();
 			}
 		});
-		textField_2.setBounds(33, 358, 606, 31);
+		textField_2.setBounds(164, 392, 606, 31);
 		textField_2.setEditable(false);
 		panel_1.add(textField_2);
 		textField_2.setColumns(10);
 		
-		JCheckBox chckbxWhereEnabled = new JCheckBox("Where enabled");
+		JCheckBox chckbxWhereEnabled = new JCheckBox("Where:");
 		chckbxWhereEnabled.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if(chckbxWhereEnabled.isSelected()) {
@@ -449,7 +446,7 @@ public class GUI2 {
 			}
 		});
 		chckbxWhereEnabled.setBackground(new Color(147, 112, 219));
-		chckbxWhereEnabled.setBounds(33, 228, 164, 23);
+		chckbxWhereEnabled.setBounds(33, 243, 164, 23);
 		panel_1.add(chckbxWhereEnabled);
 		
 		JButton btnExecuteQuery = new JButton("Execute Query");
@@ -471,26 +468,7 @@ public class GUI2 {
 					}
 			}
 		});
-		btnExecuteQuery.setBounds(33, 401, 164, 25);
+		btnExecuteQuery.setBounds(12, 435, 164, 25);
 		panel_1.add(btnExecuteQuery);
-		
-		
-		
-		JPanel panel_2 = new JPanel();
-		tabbedPane.addTab("New tab", null, panel_2, null);
-		panel_2.setLayout(null);
-		
-		JLabel lblSelectTable_1 = new JLabel("Select table");
-		lblSelectTable_1.setBounds(34, 35, 105, 15);
-		panel_2.add(lblSelectTable_1);
-		
-		@SuppressWarnings("rawtypes")
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setBounds(146, 30, 521, 24);
-		panel_2.add(comboBox_1);
-		
-		JLabel lblSelectAttributesYou = new JLabel("select attributes you want to insert into the table");
-		lblSelectAttributesYou.setBounds(36, 95, 418, 15);
-		panel_2.add(lblSelectAttributesYou);
 	}
 }
