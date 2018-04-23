@@ -29,6 +29,17 @@ import java.awt.event.ItemEvent;
 import java.awt.Color;
 import javax.swing.JTable;
 
+
+
+/**
+ * GUI for sql project
+ * there are two tabs in this GUI: one is the section tab which is a search tool for sections in libraries and provenance. In addition
+ * you can dictate the date range to limit the number of possibilities.
+ * the second tab is a query tool that performs query with where clauses if desired!
+ * @author alavibx 
+ * @version 4/22/2018
+ *
+ */
 public class GUI2 {
 
 	private JFrame Manuscript_GUI;
@@ -42,14 +53,10 @@ public class GUI2 {
 	private String provenanceTo;
 	private SQLHandler handler;
 	private String table;
-	private ArrayList<String> attr = new ArrayList<String>();
-	private int count;
-	private ArrayList<String> attrs;
+	private ArrayList<String> attrs = new ArrayList<String>(); ///hold the attributes
 	private ArrayList<String> sections = new ArrayList<String>();
 	private JTable table_1;
 	private ArrayList<String> selected = new ArrayList<String>();
-	private String selOrBy;
-	private ArrayList<String> all = new ArrayList<String>();
 	private JTextField textField_2;
 	private String oneAttr;
 	private String criteria;
@@ -77,10 +84,8 @@ public class GUI2 {
 	 * @throws SQLException 
 	 */
 	public GUI2() throws SQLException {
-		handler = SQLHandler.getSQLHandler();
-		initialize();
-		
-		
+		handler = SQLHandler.getSQLHandler(); //establish connection with the server and crete a handler object to use for query
+		initialize();	
 	}
 
 	/**
@@ -117,7 +122,7 @@ public class GUI2 {
 		scrollPane.setBounds(134, 28, 471, 92);
 		panel.add(scrollPane);
 		
-		JList list = new JList();
+		JList<String> list = new JList<String>();
 		list.setBackground(new Color(255, 240, 245));
 		list.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
@@ -126,13 +131,15 @@ public class GUI2 {
 		});
 		scrollPane.setViewportView(list);
 		ArrayList<String> libraries = handler.getLibraries();
-		list.setModel(new AbstractListModel() {
-			
-			//String[] values = new String[] {"Rose", "Carrier", "music", "boom", "bam"};
+		list.setModel(new AbstractListModel<String>() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 			public int getSize() {
 				return libraries.size();
 			}
-			public Object getElementAt(int index) {
+			public String getElementAt(int index) {
 				return libraries.get(index);
 			}
 		});
@@ -151,7 +158,6 @@ public class GUI2 {
 		});
 		scrollPane_1.setViewportView(list_1);
 		list_1.setModel(new AbstractListModel() {
-			//String[] values = new String[] {"heaven", "computer", "cs", "cis", "philosophy", "next", "thing", "in ", "the ", "list"};
 			public int getSize() {
 				return libraries.size();
 			}
@@ -219,17 +225,7 @@ public class GUI2 {
 		JButton btnNewButton = new JButton("Show Info");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (libraryThru == null) {
-					libraryThru = "zzz";
-				}
-				//String message = " ";
-				//message += "library from: " + libraryFrom + '\n';
-				//message += "library though: " + libraryThru + '\n';
-				//message += "date from: " + dateFrom + '\n';
-				//message += "date through: " + dateThru + '\n';
-				//message += "provenance" + provenance + '\n';
-				sections = handler.executePane1(libraryFrom, libraryThru, dateFrom, dateThru, provenanceFr, provenanceTo); //so instead of being an arrayList of sections its an arraylist of strings, since we would have just called toString
-				
+				sections = handler.executePane1(libraryFrom, libraryThru, dateFrom, dateThru, provenanceFr, provenanceTo);
 				for(String section: sections) {
 					JOptionPane.showMessageDialog(null, section , "Section Information", JOptionPane.INFORMATION_MESSAGE);
 					int dialogButton = JOptionPane.YES_NO_OPTION;
@@ -241,10 +237,6 @@ public class GUI2 {
 					}
 				    
 				}
-				
-				
-				//JOptionPane.showMessageDialog(null, sections.get(1).toString() , "Section Information", JOptionPane.INFORMATION_MESSAGE);
-				
 			}
 		});
 		btnNewButton.setBounds(312, 508, 117, 25);
@@ -318,17 +310,9 @@ public class GUI2 {
 			comboBox.addItem(table);
 		}
 		table = (String) comboBox.getSelectedItem();
-		//comboBox.setModel(new DefaultComboBoxModel(handler.getTables()));
-		//comboBox.addActionListener(new ActionListener() {
-			//public void actionPerformed(ActionEvent e) {
-				//table = (String) comboBox.getSelectedItem();
-			//}
-		//});
 		comboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				table = (String) comboBox.getSelectedItem();
-				//JOptionPane.showMessageDialog(null, table);
-				
 			}
 		});
 		
@@ -348,11 +332,7 @@ public class GUI2 {
 				}
 			}
 		});
-		//chckbxCheckIfYou.addActionListener(new ActionListener() {
-			//public void actionPerformed(ActionEvent e) {
-				//list_4.setEnabled(true);
-			//}
-		//});
+		
 		chckbxCheckIfYou.setBounds(186, 93, 378, 23);
 		panel_1.add(chckbxCheckIfYou);
 		
@@ -360,7 +340,6 @@ public class GUI2 {
 		scrollPane_4.setBounds(180, 141, 457, 84);
 		panel_1.add(scrollPane_4);
 		
-		//JList list_4 = new JList();
 		scrollPane_4.setViewportView(list_4);
 		list_4.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		list_4.addListSelectionListener(new ListSelectionListener() {
@@ -377,11 +356,7 @@ public class GUI2 {
 				
 			}
 		});
-		
-		
-		//JList list_4 = new JList();
-		//attrs = handler.getAttributes(table);
-		
+				
 		list_4.setEnabled(false);
 		
 		JScrollPane scrollPane_5 = new JScrollPane();
@@ -391,13 +366,7 @@ public class GUI2 {
 		
 		table_1 = new JTable();
 		table_1.setBackground(new Color(255, 240, 245));
-		scrollPane_5.setViewportView(table_1);
-		
-		
-		
-		
-		
-		
+		scrollPane_5.setViewportView(table_1);	
 		
 		JComboBox comboBox_2 = new JComboBox();
 		JButton btnLoadAttributes = new JButton("Load Attributes");
@@ -408,7 +377,6 @@ public class GUI2 {
 				ArrayList<String> values = handler.getAttributes(table);
 				oneAttr = values.get(0); 
 				comboBox_2.setSelectedItem(values.get(0));
-				//ListTableModel model = ListTableModel.createModelFromResultSet(handler.executeStructuredQuery("select", attrs, table, ""));
 				for(String value: values) {
 					dlm.addElement(value);
 					dcm.addElement(value);
@@ -436,6 +404,7 @@ public class GUI2 {
 		comboBox_2.setEnabled(false);
 		panel_1.add(comboBox_2);
 		
+		@SuppressWarnings("rawtypes")
 		JComboBox comboBox_3 = new JComboBox();
 		comboBox_3.setModel(new DefaultComboBoxModel(new String[] {"Starts With", "Ends With", "Is", "Contains"}));
 		qualifier = (String) comboBox_3.getSelectedItem();
@@ -483,9 +452,6 @@ public class GUI2 {
 		chckbxWhereEnabled.setBounds(33, 228, 164, 23);
 		panel_1.add(chckbxWhereEnabled);
 		
-		//String[] attributes = new String[attrs.size()];
-		//attrs.toArray(attributes);
-		
 		JButton btnExecuteQuery = new JButton("Execute Query");
 		btnExecuteQuery.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
@@ -501,7 +467,6 @@ public class GUI2 {
 					
 						
 					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 			}
@@ -519,6 +484,7 @@ public class GUI2 {
 		lblSelectTable_1.setBounds(34, 35, 105, 15);
 		panel_2.add(lblSelectTable_1);
 		
+		@SuppressWarnings("rawtypes")
 		JComboBox comboBox_1 = new JComboBox();
 		comboBox_1.setBounds(146, 30, 521, 24);
 		panel_2.add(comboBox_1);
