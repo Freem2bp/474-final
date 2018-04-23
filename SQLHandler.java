@@ -322,11 +322,11 @@ public class SQLHandler
 			
 			
 			String query =  "select " + butes + " FROM " + table + " where ";
-			for (int j = 0; j < fixedExtra.size(); j++) {
+			for (int j = 0; j < fixedExtra.size() - 1; j++) {
 				query += fixedExtra.get(j);
 				query += " AND ";
 			}
-			query += "1=1";
+			query += fixedExtra.get(fixedExtra.size() - 1);
 			//this query makes use of the fact that like operates identically to = when not using wildcards
 			try
 			{
