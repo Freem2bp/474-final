@@ -192,7 +192,7 @@ public class SQLHandler
 	 * @param criteria the search 
 	 * @return
 	 */
-	public ResultSet executeStructuredQuery(ArrayList<String> attributes , String table, String qualifier, String qualifierAtt, String criteria) {
+	public ResultSet executeStructuredQuery(ArrayList<String> attributes , String table, String qualifierAtt, String qualifier, String criteria) {
 		
 			ResultSet rs = null;
 
