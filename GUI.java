@@ -36,6 +36,7 @@ import javax.swing.JTable;
 import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Image;
+import javax.swing.JRadioButton;
 
 
 
@@ -595,67 +596,23 @@ public class GUI {
 		chckbxWhereEnabled.setBounds(33, 243, 164, 23);
 		QueryPanel.add(chckbxWhereEnabled);
 		
-		
-		////////////////////Button for getting the query and producing the table///////////////////
-		JButton btnExecuteQuery = new JButton("Execute Query");
-		btnExecuteQuery.setFont(new Font("eufm10", Font.BOLD, 16));
+		////////////////////Button for add where///////////////////			
 		JButton btnAddWhere = new JButton("Add where");
-		/**
-		 * this listener uses ListTableModel.java and RowTableModel.java which were obtained as an outside source.
-		 * they are used to transform a result set from the database and turn in into a table
-		 */
-		btnExecuteQuery.addActionListener(new ActionListener() {
-			/**
-			 * two versions are implemented:
-			 * the first version creates the table without a where clause
-			 * the second version is only available if the user checks the where button; in this case,
-			 * the table is produced with regards to the where clause
-			 */
-			public void actionPerformed(ActionEvent e){
-				ListTableModel model;
-					try {
-						//if where chosen
-						if(selectedAttributeBox.isEnabled()) {
-							//executeStructuredQuery will produce the result set and pass it to createModelFromResultSet
-							model = ListTableModel.createModelFromResultSet(handler.executeStructuredQuery(selected, table,oneAttr, qualifier, criteria));
-						} else if(btnAddWhere.isEnabled()) {
-							model = ListTableModel.createModelFromResultSet(handler.executeStructuredQuery(selected, table,qAttrs, qualifiers, criterion));
-						}
-						else {
-							//simpler version without the where clause
-							model = ListTableModel.createModelFromResultSet(handler.executeStructuredQuery(selected, table));
-						}
-						
-						queryTable.setModel(model);
-					
-						
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					}
-			}
-		});
-		btnExecuteQuery.setBounds(12, 435, 164, 25);
-		QueryPanel.add(btnExecuteQuery);
-		
-		
 		btnAddWhere.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				qualifiers.add(qualifier);
 				qAttrs.add(oneAttr);
-				criterion.add(criteria);
-				for(String qualifier: qualifiers)
-					JOptionPane.showMessageDialog(null, qualifier);
-				for(String a: qAttrs)
-					JOptionPane.showMessageDialog(null, a);
-				for(String c: criterion)
-					JOptionPane.showMessageDialog(null, c);
-				
+				criterion.add(criteria);				
 			}
 		});
 		btnAddWhere.setBounds(398, 435, 117, 25);
 		btnAddWhere.setEnabled(false);
 		panel2.add(btnAddWhere);
 		
+		
+		
+		
+		////////////////////Button for if want than more one where clause///////////////////	
 		JCheckBox chckbxCheckIfU = new JCheckBox("check if u want more than one where");
 		chckbxCheckIfU.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -673,6 +630,72 @@ public class GUI {
 		chckbxCheckIfU.setBounds(365, 242, 293, 23);
 		panel2.add(chckbxCheckIfU);
 		
+		
+		
+		////////////////////Button for getting the query and producing the table///////////////////
+		JButton btnExecuteQuery = new JButton("Execute Query");
+		btnExecuteQuery.setFont(new Font("eufm10", Font.BOLD, 16));
+		
+		//and Button
+		JRadioButton rdbtnAnd = new JRadioButton("And");
+		rdbtnAnd.setBounds(241, 435, 149, 23);
+		panel2.add(rdbtnAnd);
+		
+		
+		//Or button
+		JRadioButton rdbtnOr = new JRadioButton("Or");
+		rdbtnOr.setBounds(554, 435, 149, 23);
+		panel2.add(rdbtnOr);
+		
+		/**
+		 * this listener uses ListTableModel.java and RowTableModel.java which were obtained as an outside source.
+		 * they are used to transform a result set from the database and turn in into a table
+		 */
+		btnExecuteQuery.addActionListener(new ActionListener() {
+			/**
+			 * two versions are implemented:
+			 * the first version creates the table without a where clause
+			 * the second version is only available if the user checks the where button; in this case,
+			 * the table is produced with regards to the where clause
+			 */
+			public void actionPerformed(ActionEvent e){
+				ListTableModel model;
+					try {
+						//if where chosen
+						if(selectedAttributeBox.isEnabled()) {
+							if(btnAddWhere.isEnabled()) {
+								if(rdbtnAnd.isSelected()) {
+									model = ListTableModel.createModelFromResultSet(handler.executeStructuredQuery(selected, table,qAttrs, qualifiers, criterion, "AND"));
+								}
+								else if(rdbtnOr.isSelected()) {
+									model = ListTableModel.createModelFromResultSet(handler.executeStructuredQuery(selected, table,qAttrs, qualifiers, criterion, "OR"));
+								}
+								else {
+									model = null;
+								}
+								
+							}
+							else {
+								//executeStructuredQuery will produce the result set and pass it to createModelFromResultSet
+								model = ListTableModel.createModelFromResultSet(handler.executeStructuredQuery(selected, table,oneAttr, qualifier, criteria));
+							}
+							
+						}
+						else {
+							//simpler version without the where clause	
+							model = ListTableModel.createModelFromResultSet(handler.executeStructuredQuery(selected, table));
+						}
+						
+						queryTable.setModel(model);
+					
+						
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+			}
+		});
+		btnExecuteQuery.setBounds(12, 435, 164, 25);
+		QueryPanel.add(btnExecuteQuery);		
 		
 	}
 }
