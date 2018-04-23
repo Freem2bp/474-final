@@ -52,7 +52,8 @@ public class GUI2 {
 	private ArrayList<String> all = new ArrayList<String>();
 	private JTextField textField_2;
 	private String oneAttr;
-	private String extra;
+	private String criteria;
+	private String qualifier;
 	
 
 	/**
@@ -393,27 +394,10 @@ public class GUI2 {
 		scrollPane_5.setViewportView(table_1);
 		
 		
-		JButton btnExecuteQuery = new JButton("Execute Query");
-		btnExecuteQuery.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e){
-				ListTableModel model;
-					try {
-						
-						model = ListTableModel.createModelFromResultSet(handler.executeStructuredQuery(selected, table));
-						table_1.setModel(model);
-					
-						
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-			}
-		});
 		
 		
 		
-		btnExecuteQuery.setBounds(33, 401, 164, 25);
-		panel_1.add(btnExecuteQuery);
+		
 		
 		JComboBox comboBox_2 = new JComboBox();
 		JButton btnLoadAttributes = new JButton("Load Attributes");
@@ -422,6 +406,8 @@ public class GUI2 {
 				DefaultListModel dlm = new DefaultListModel();
 				DefaultComboBoxModel dcm = new DefaultComboBoxModel();
 				ArrayList<String> values = handler.getAttributes(table);
+				oneAttr = values.get(0); 
+				comboBox_2.setSelectedItem(values.get(0));
 				//ListTableModel model = ListTableModel.createModelFromResultSet(handler.executeStructuredQuery("select", attrs, table, ""));
 				for(String value: values) {
 					dlm.addElement(value);
@@ -436,7 +422,10 @@ public class GUI2 {
 		});
 		btnLoadAttributes.setBounds(27, 138, 117, 25);
 		panel_1.add(btnLoadAttributes);
-		comboBox_2.setEnabled(false);
+		
+		ArrayList<String> values = handler.getAttributes(table);
+		oneAttr = values.get(0); 
+		comboBox_2.setSelectedItem(values.get(0));
 		
 		comboBox_2.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -444,10 +433,18 @@ public class GUI2 {
 			}
 		});
 		comboBox_2.setBounds(181, 255, 456, 24);
+		comboBox_2.setEnabled(false);
 		panel_1.add(comboBox_2);
 		
 		JComboBox comboBox_3 = new JComboBox();
 		comboBox_3.setModel(new DefaultComboBoxModel(new String[] {"Starts With", "Ends With", "Is", "Contains"}));
+		qualifier = (String) comboBox_3.getSelectedItem();
+		comboBox_3.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				qualifier = (String) comboBox_3.getSelectedItem();
+			}
+		});
+		
 		comboBox_3.setBounds(180, 306, 457, 23);
 		comboBox_3.setEnabled(false);
 		panel_1.add(comboBox_3);
@@ -459,7 +456,7 @@ public class GUI2 {
 		textField_2 = new JTextField();
 		textField_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				extra = textField_2.getText();
+				criteria = textField_2.getText();
 			}
 		});
 		textField_2.setBounds(33, 358, 606, 31);
@@ -488,6 +485,30 @@ public class GUI2 {
 		
 		//String[] attributes = new String[attrs.size()];
 		//attrs.toArray(attributes);
+		
+		JButton btnExecuteQuery = new JButton("Execute Query");
+		btnExecuteQuery.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e){
+				ListTableModel model;
+					try {
+						if(comboBox_2.isEnabled()) {
+							model = ListTableModel.createModelFromResultSet(handler.executeStructuredQuery(selected, table,oneAttr, qualifier, criteria));
+						} else {
+							model = ListTableModel.createModelFromResultSet(handler.executeStructuredQuery(selected, table));
+						}
+						
+						table_1.setModel(model);
+					
+						
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+			}
+		});
+		btnExecuteQuery.setBounds(33, 401, 164, 25);
+		panel_1.add(btnExecuteQuery);
+		
 		
 		
 		JPanel panel_2 = new JPanel();
