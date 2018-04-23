@@ -190,7 +190,8 @@ public class SQLHandler
 	 * @param qualifier the relation of the criteria
 	 * @param qualifierAtt the attribute that we will be restricting on
 	 * @param criteria the search 
-	 * @return
+	 * @return a resultset formed from the query
+	 *  reads as {"chantID" "FeastID}, Chant, leafNumber, Ends With, r 
 	 */
 	public ResultSet executeStructuredQuery(ArrayList<String> attributes , String table, String qualifierAtt, String qualifier, String criteria) {
 		
@@ -277,6 +278,69 @@ public class SQLHandler
 		
 		return rs;	
 }
+	
+	/**
+	 * a third version that allows for multiple where clauses, if we find a way to incorporate it in the gui.
+	 * @param attributes a list of attributes the user wants to see output
+	 * @param table the origin table to get the attributes
+	 * @param qualifier the relation of the criteria
+	 * @param qualifierAtt the attribute that we will be restricting on
+	 * @param criteria the search 
+	 * @return a resultset formed from the query
+	 *  reads as {"chantID" "FeastID}, Chant, leafNumber, Ends With, r 
+	 */
+	public ResultSet executeStructuredQuery(ArrayList<String> attributes , String table, ArrayList<String> qualifierAtt, ArrayList<String> qualifier, ArrayList<String> criteria) {
+		
+			ResultSet rs = null;
+
+			String butes;
+			if (attributes == null || attributes.isEmpty()) {
+			butes = "*";
+			}
+			else {
+			butes = queryString(attributes);
+			}
+			ArrayList<String> fixedExtra = new ArrayList<String>();
+			for (int i = 0; i < qualifier.size(); i++) {
+			switch (qualifier.get(i)) { //switch over the qualifier, editing criteria as we see need
+			case "Starts With":
+				fixedExtra.add("(" + qualifierAtt.get(i) + " like '" + criteria.get(i) + "%')");
+				break;
+			case "Ends With":
+				fixedExtra.add("(" + qualifierAtt.get(i) + " like " + "'%" + criteria.get(i) +"')");
+				break;
+			case "Is":
+				fixedExtra.add("(" + qualifierAtt.get(i) + " like '" + criteria.get(i) + "')");
+				break;
+			case "Contains":
+				fixedExtra.add("(" + qualifierAtt.get(i) + " like " + "'%" + criteria.get(i) + "%')");
+				break;
+			}
+			}
+			
+			
+			
+			String query =  "select " + butes + " FROM " + table + " where ";
+			for (int j = 0; j < fixedExtra.size(); j++) {
+				query += fixedExtra.get(j);
+				query += " AND ";
+			}
+			query += "1=1";
+			//this query makes use of the fact that like operates identically to = when not using wildcards
+			try
+			{
+				rs = stmt.executeQuery(query);
+
+			} // end try
+			
+			catch ( SQLException e)
+			{
+				handleSQLError( e, query );
+				
+			} // end catch
+			
+			return rs;	
+	}
 
 	
 	/**
@@ -474,7 +538,11 @@ public class SQLHandler
 	
 
 	
-	public void toBasicOutput(ResultSet rs) {
+	/**
+	 * an unused in the gui method for testing the raw output of some of the queries
+	 * @param rs
+	 */
+	protected void toBasicOutput(ResultSet rs) {
 		try {
 				
 			int count = getNumColumns(rs);
@@ -518,12 +586,20 @@ public class SQLHandler
 		
 	}
 	
+	/**
+	 * @return the table names in the database
+	 */
 	public String[] getTables() {
 		String[] returner = {"Century", "Chant", "Country", "Cursus", "Feast", "Genre", "Illumination", "IlluminationType", "Initial", "Leaf", "Library", "Manuscript", "MasterChant", "Melody", "MSType", "Notation", "Office", "Provenance", "Section", "SourceCompleteness" };
 	return returner;
 	}
 
 	
+	/**
+	 * convert an arraylist into a string that is a syntactically correct list of attributes 
+	 * @param the arraylist of attributes
+	 * @return a list of attributes in a single string
+	 */
 	public String queryString(ArrayList<String> at) {
 		if (at.size() == 1) {
 			return at.get(0);
