@@ -49,8 +49,10 @@ public class GUI2 {
 	private JTable table_1;
 	private ArrayList<String> selected = new ArrayList<String>();
 	private String selOrBy;
-	private String all = "*";
-
+	private ArrayList<String> all = new ArrayList<String>();
+	private JTextField textField_2;
+	private String oneAttr;
+	private String extra;
 	
 
 	/**
@@ -88,13 +90,13 @@ public class GUI2 {
 		Manuscript_GUI = new JFrame();
 		Manuscript_GUI.setResizable(false);
 		Manuscript_GUI.setBackground(Color.WHITE);
-		Manuscript_GUI.setBounds(100, 100, 771, 633);
+		Manuscript_GUI.setBounds(100, 100, 775, 724);
 		Manuscript_GUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Manuscript_GUI.getContentPane().setLayout(null);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBackground(Color.CYAN);
-		tabbedPane.setBounds(12, 12, 749, 572);
+		tabbedPane.setBounds(12, 12, 749, 674);
 		Manuscript_GUI.getContentPane().add(tabbedPane);
 		
 		JPanel panel = new JPanel();
@@ -300,8 +302,8 @@ public class GUI2 {
 		lblSelectTable.setBounds(33, 41, 120, 15);
 		panel_1.add(lblSelectTable);
 		
-		JLabel lblSelectMethodOf = new JLabel("Select method of display");
-		lblSelectMethodOf.setBounds(35, 237, 178, 15);
+		JLabel lblSelectMethodOf = new JLabel("select attr");
+		lblSelectMethodOf.setBounds(32, 260, 178, 15);
 		panel_1.add(lblSelectMethodOf);
 		
 		JLabel lblNewLabel = new JLabel("select attributes");
@@ -342,7 +344,6 @@ public class GUI2 {
 				}
 				else {
 					list_4.setEnabled(false);
-					
 				}
 			}
 		});
@@ -353,38 +354,6 @@ public class GUI2 {
 		//});
 		chckbxCheckIfYou.setBounds(186, 93, 378, 23);
 		panel_1.add(chckbxCheckIfYou);
-		
-		JRadioButton rdbtnOrderBy = new JRadioButton("order by");
-		rdbtnOrderBy.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				selOrBy = rdbtnOrderBy.getText(); 
-			}
-		});
-		rdbtnOrderBy.setBackground(new Color(147, 112, 219));
-		rdbtnOrderBy.setBounds(33, 260, 149, 23);
-		panel_1.add(rdbtnOrderBy);
-		
-		JRadioButton rdbtnSortBy = new JRadioButton("select");
-		rdbtnSortBy.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				selOrBy = rdbtnSortBy.getText();
-			}
-		});
-		rdbtnSortBy.setBackground(new Color(147, 112, 219));
-		rdbtnSortBy.setBounds(274, 260, 149, 23);
-		panel_1.add(rdbtnSortBy);
-		
-		JRadioButton rdbtnGroupBy = new JRadioButton("group by");
-		rdbtnGroupBy.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				selOrBy = rdbtnGroupBy.getText();
-			}
-		});
-		
-		
-		rdbtnGroupBy.setBackground(new Color(147, 112, 219));
-		rdbtnGroupBy.setBounds(518, 260, 149, 23);
-		panel_1.add(rdbtnGroupBy);
 		
 		JScrollPane scrollPane_4 = new JScrollPane();
 		scrollPane_4.setBounds(180, 141, 457, 84);
@@ -415,7 +384,7 @@ public class GUI2 {
 		list_4.setEnabled(false);
 		
 		JScrollPane scrollPane_5 = new JScrollPane();
-		scrollPane_5.setBounds(33, 328, 699, 205);
+		scrollPane_5.setBounds(33, 430, 699, 205);
 		panel_1.add(scrollPane_5);
 		
 		
@@ -429,8 +398,11 @@ public class GUI2 {
 			public void actionPerformed(ActionEvent e){
 				ListTableModel model;
 					try {
-						model = ListTableModel.createModelFromResultSet(handler.executeStructuredQuery(selOrBy, selected, table, ""));
+						
+						model = ListTableModel.createModelFromResultSet(handler.executeStructuredQuery(selected, table));
 						table_1.setModel(model);
+					
+						
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -440,24 +412,79 @@ public class GUI2 {
 		
 		
 		
-		btnExecuteQuery.setBounds(33, 291, 164, 25);
+		btnExecuteQuery.setBounds(33, 401, 164, 25);
 		panel_1.add(btnExecuteQuery);
 		
+		JComboBox comboBox_2 = new JComboBox();
 		JButton btnLoadAttributes = new JButton("Load Attributes");
 		btnLoadAttributes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DefaultListModel dlm = new DefaultListModel();
+				DefaultComboBoxModel dcm = new DefaultComboBoxModel();
 				ArrayList<String> values = handler.getAttributes(table);
 				//ListTableModel model = ListTableModel.createModelFromResultSet(handler.executeStructuredQuery("select", attrs, table, ""));
 				for(String value: values) {
 					dlm.addElement(value);
+					dcm.addElement(value);
 				}
 				list_4.setModel(dlm);
+				comboBox_2.setModel(dcm);
+				
+				
 				
 			}
 		});
 		btnLoadAttributes.setBounds(27, 138, 117, 25);
 		panel_1.add(btnLoadAttributes);
+		comboBox_2.setEnabled(false);
+		
+		comboBox_2.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				oneAttr = (String) comboBox_2.getSelectedItem();
+			}
+		});
+		comboBox_2.setBounds(181, 255, 456, 24);
+		panel_1.add(comboBox_2);
+		
+		JComboBox comboBox_3 = new JComboBox();
+		comboBox_3.setModel(new DefaultComboBoxModel(new String[] {"Starts With", "Ends With", "Is", "Contains"}));
+		comboBox_3.setBounds(180, 306, 457, 23);
+		comboBox_3.setEnabled(false);
+		panel_1.add(comboBox_3);
+		
+		JLabel lblSelectndAttr = new JLabel("relation");
+		lblSelectndAttr.setBounds(33, 310, 120, 15);
+		panel_1.add(lblSelectndAttr);
+		
+		textField_2 = new JTextField();
+		textField_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				extra = textField_2.getText();
+			}
+		});
+		textField_2.setBounds(33, 358, 606, 31);
+		textField_2.setEditable(false);
+		panel_1.add(textField_2);
+		textField_2.setColumns(10);
+		
+		JCheckBox chckbxWhereEnabled = new JCheckBox("Where enabled");
+		chckbxWhereEnabled.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if(chckbxWhereEnabled.isSelected()) {
+					comboBox_2.setEnabled(true);
+					comboBox_3.setEnabled(true);
+					textField_2.setEditable(true);
+				}
+				else {
+					comboBox_2.setEnabled(false);
+					comboBox_3.setEnabled(false);
+					textField_2.setEditable(false);
+				}
+			}
+		});
+		chckbxWhereEnabled.setBackground(new Color(147, 112, 219));
+		chckbxWhereEnabled.setBounds(33, 228, 164, 23);
+		panel_1.add(chckbxWhereEnabled);
 		
 		//String[] attributes = new String[attrs.size()];
 		//attrs.toArray(attributes);
