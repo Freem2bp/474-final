@@ -6,14 +6,12 @@ import java.util.Collections;
 import java.util.HashMap;
 
 /**
- * Class to handle SQL operations
- * ** 3/21/2008 **
- * ** 3/18/2008 **
  * 
  * Modifications: Adopted the Singleton Design Pattern (3/21)
  * 
- * @author Brian Freeman with Framework by Michael Norton
- * @version 1.1
+ * 
+ * @author Brian Freeman and Behan Alavi 
+ * @version 1.@
  *
  */
 public class SQLHandler
@@ -186,32 +184,50 @@ public class SQLHandler
 			return returnList;	
 	}
 	
-	public ResultSet executeStructuredQuery(String selOrBy, ArrayList<String> attributes , String table, String extra) {
+	/**
+	 * @param attributes a list of attributes the user wants to see output
+	 * @param table the origin table to get the attributes
+	 * @param qualifier the relation of the criteria
+	 * @param qualifierAtt the attribute that we will be restricting on
+	 * @param criteria the search 
+	 * @return
+	 */
+	public ResultSet executeStructuredQuery(ArrayList<String> attributes , String table, String qualifier, String qualifierAtt, String criteria) {
 		
 			ResultSet rs = null;
-			ArrayList<String[]> returner = new ArrayList<String[]>();
+
 			String butes;
-			if (attributes == null) {
+			if (attributes == null || attributes.isEmpty()) {
 			butes = "*";
 			}
 			else {
 			butes = queryString(attributes);
 			}
-			String query =  selOrBy + " " + butes + " FROM " + table + " " + extra;
+			String fixedCriteria = "%";
+			switch (qualifier) { //switch over the qualifier, editing criteria as we see need
+			case "Starts With":
+				fixedCriteria = criteria + "%";
+				break;
+			case "Ends With":
+				fixedCriteria = "%" + criteria;
+				break;
+			case "Is":
+				fixedCriteria = criteria;
+				break;
+			case "Contains":
+				fixedCriteria = "%" + criteria + "%";
+				break;
+			}
+			
+			
+			
+			
+			String query =  "select " + butes + " FROM " + table + " where " + qualifierAtt  + " like '" + fixedCriteria + "'";
+			//this query makes use of the fact that like operates identically to = when not using wildcards
 			try
 			{
 				rs = stmt.executeQuery(query);
-//				while  (rs.next()) {
-//					
-//					String[] entry = new String[attributes.length];
-//					
-//					for (int i = 1; i <= attributes.length; i++) {
-//						entry[i - 1] = rs.getString(i);
-//					}
-//					
-//					returner.add(entry);
-//				}
-				
+
 			} // end try
 			
 			catch ( SQLException e)
@@ -222,6 +238,46 @@ public class SQLHandler
 			
 			return rs;	
 	}
+	
+	/**
+	 * version of the method that is called if the extra qualifiers are disabled on pane2
+	 * @param attributes a list of attributes the user wants to see output
+	 * @param table the origin table to get the attributes
+	 * @return
+	 */
+	public ResultSet executeStructuredQuery(ArrayList<String> attributes , String table) {
+		
+		ResultSet rs = null;
+
+		String butes;
+		if (attributes == null || attributes.isEmpty()) {
+		butes = "*";
+		}
+		else {
+		butes = queryString(attributes);
+		}
+
+		
+		
+		
+		
+		String query =  "select " + butes + " FROM " + table;
+		//this query makes use of the fact that like operates identically to = when not using wildcards
+		try
+		{
+			rs = stmt.executeQuery(query);
+
+		} // end try
+		
+		catch ( SQLException e)
+		{
+			handleSQLError( e, query );
+			
+		} // end catch
+		
+		return rs;	
+}
+
 	
 	/**
 	 * Execute a SQL Select statement
@@ -416,32 +472,7 @@ public class SQLHandler
 		
 	} // method next
 	
-//	private HashMap<String,String> populateMap() {     REDACTED METHOD FOR REFERENCE
-//		
-//			ResultSet rs = null;
-//			HashMap<String, String> returner = new HashMap<String, String>();
-//			try
-//			{
-//				rs = stmt.executeQuery("SELECT libSiglum, city, library from Library" );
-//				
-//				while (rs.next()) {
-//					returner.put(rs.getString("city") + " - " + rs.getString("library"),rs.getString("libSiglum"));
-//				}
-//				
-//				
-//			
-//			} // end try
-//			
-//			catch ( SQLException e)
-//			{
-//				handleSQLError(e, "SELECT libSiglum, library from Library");
-//			
-//			} // end catch
-//			
-//			return returner;
-//		
-//		}
-	
+
 	
 	public void toBasicOutput(ResultSet rs) {
 		try {
@@ -471,6 +502,11 @@ public class SQLHandler
 		return returner;
 	}
 	
+	/**
+	 * returns an arraylist of strings that are the various columns of a given table in the database
+	 * @param table the table we want to see the column headings of
+	 * @return 
+	 */
 	public ArrayList<String> getAttributes(String table) {
 		ResultSet rs = null;
 		ArrayList<String> returner = new ArrayList<String>();
@@ -574,4 +610,97 @@ public class SQLHandler
 	}
 		
 } // class SQLHandler
+
+
+// REFERENCES: these methods were initially designed to be utilized, their use has been repurposed elsewhere and these comments exist for our reference
+//public ResultSet executeChantSearch(ArrayList<String> butes, String qualifier, String qualifierAtt, String criteria) {
+//ResultSet rs = null;
+//String fixedAttributes;
+//if (butes == null || butes.isEmpty()) {
+//fixedAttributes = "*";
+//}
+//else {
+//fixedAttributes = queryString(butes);
+//}
+//String fixedCriteria = "%";
+//switch (qualifier) {//	private HashMap<String,String> populateMap() {     REDACTED METHOD FOR REFERENCE
+//
+//ResultSet rs = null;
+//HashMap<String, String> returner = new HashMap<String, String>();
+//try
+//{
+//	rs = stmt.executeQuery("SELECT libSiglum, city, library from Library" );
+//	
+//	while (rs.next()) {
+//		returner.put(rs.getString("city") + " - " + rs.getString("library"),rs.getString("libSiglum"));
+//	}
+//	
+//	
+//
+//} // end try
+//
+//catch ( SQLException e)
+//{
+//	handleSQLError(e, "SELECT libSiglum, library from Library");
+//
+//} // end catch
+//
+//return returner;
+//
+//}
+
+//case "Starts With":
+//	fixedCriteria = criteria + "%";
+//	break;
+//case "Ends With":
+//	fixedCriteria = "%" + criteria;
+//	break;
+//case "Is":
+//	fixedCriteria = criteria;
+//	break;
+//case "Contains":
+//	fixedCriteria = "%" + criteria + "%";
+//	break;
+//}
+
+//String query =  "Select " + fixedAttributes + " FROM Chant where " + qualifierAtt  + " like '" + fixedCriteria + "'";
+//try
+//{
+//	rs = stmt.executeQuery(query);
+//} // end try
+//
+//catch ( SQLException e)
+//{
+//	handleSQLError( e, query );
+//	
+//} // end catch
+//
+//return rs;
+//}
+//private HashMap<String,String> populateMap() {     REDACTED METHOD FOR REFERENCE
+//
+//	ResultSet rs = null;
+//	HashMap<String, String> returner = new HashMap<String, String>();
+//	try
+//	{
+//		rs = stmt.executeQuery("SELECT libSiglum, city, library from Library" );
+//		
+//		while (rs.next()) {
+//			returner.put(rs.getString("city") + " - " + rs.getString("library"),rs.getString("libSiglum"));
+//		}
+//		
+//		
+//	
+//	} // end try
+//	
+//	catch ( SQLException e)
+//	{
+//		handleSQLError(e, "SELECT libSiglum, library from Library");
+//	
+//	} // end catch
+//	
+//	return returner;
+//
+//}
+
 
