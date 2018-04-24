@@ -130,21 +130,21 @@ public class GUI {
 		
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////panel 1, sections code/////////////////////////////////////////////////////
-		Image image1 = ImageIO.read(getClass().getResource("now.jpg"));
-		Image image2 = ImageIO.read(getClass().getResource("a.jpg"));
-		
-		BackgroundPanel panel =
-			    new BackgroundPanel(image1, BackgroundPanel.SCALED);
-			GradientPaint paint =
-			    new GradientPaint(0, 0, Color.BLUE, 600, 0, Color.RED);
-			panel.setPaint(paint);
-		
 		JPanel sectionPanel;
-		if(image1 != null) {
-			sectionPanel = panel;
-		} else {
-			sectionPanel = new JPanel(); 
+		try {
+			Image image1 = ImageIO.read(getClass().getResource("now.jpg"));
+			BackgroundPanel panel =
+				    new BackgroundPanel(image1, BackgroundPanel.SCALED);
+				GradientPaint paint =
+				    new GradientPaint(0, 0, Color.BLUE, 600, 0, Color.RED);
+				panel.setPaint(paint);
+			sectionPanel = panel; 
+			
+		} catch(IllegalArgumentException e ) {
+			sectionPanel = new JPanel();
 		}
+		
+		
 		
 		sectionPanel.setBackground(new Color(147, 112, 219));
 		tabbedPane.addTab("Load Section", null, sectionPanel, null);
@@ -385,18 +385,21 @@ public class GUI {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////panel 2, query code/////////////////////////////////////////////////////
 		
-		BackgroundPanel panel2 =
-			    new BackgroundPanel(image2, BackgroundPanel.SCALED);
-			GradientPaint paint2 =
-			    new GradientPaint(0, 0, Color.BLUE, 600, 0, Color.RED);
-			panel.setPaint(paint2);
-		
 		JPanel QueryPanel;	
-	    if(image2 != null) {
-	    	QueryPanel = panel2;
-	    } else {
-	    	QueryPanel = new JPanel();
-	    }
+		try {
+			Image image2 = ImageIO.read(getClass().getResource("a.jpg"));
+			BackgroundPanel panel2 =
+				    new BackgroundPanel(image2, BackgroundPanel.SCALED);
+				GradientPaint paint2 =
+				    new GradientPaint(0, 0, Color.BLUE, 600, 0, Color.RED);
+				panel2.setPaint(paint2);
+			QueryPanel = panel2;
+		} catch(IllegalArgumentException e) {
+			QueryPanel = new JPanel();
+		}
+		
+		
+		
 		QueryPanel.setBackground(new Color(147, 112, 219));
 		tabbedPane.addTab("Query", null, QueryPanel, null);
 		QueryPanel.setLayout(null);
@@ -619,7 +622,7 @@ public class GUI {
 		});
 		btnAddWhere.setBounds(387, 435, 117, 25);
 		btnAddWhere.setEnabled(false);
-		panel2.add(btnAddWhere);
+		QueryPanel.add(btnAddWhere);
 		
 		
 		
@@ -642,15 +645,15 @@ public class GUI {
 		buttons.add(rdbtnAnd);
 		buttons.add(rdbtnOr);
 		
-		panel2.add(rdbtnAnd);
-		panel2.add(rdbtnOr);
+		QueryPanel.add(rdbtnAnd);
+		QueryPanel.add(rdbtnOr);
 		rdbtnOr.setEnabled(false);
 		rdbtnAnd.setEnabled(false);
 		
 		
 		////////////////////Button for if want than more one where clause///////////////////	
 		JCheckBox chckbxCheckIfU = new JCheckBox("check if u want more than one where");
-		chckbxCheckIfU.setForeground(Color.WHITE);
+		chckbxCheckIfU.setForeground(Color.BLACK);
 		chckbxCheckIfU.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if(chckbxCheckIfU.isSelected()) {
@@ -669,7 +672,7 @@ public class GUI {
 			}
 		});
 		chckbxCheckIfU.setBounds(365, 242, 293, 23);
-		panel2.add(chckbxCheckIfU);
+		QueryPanel.add(chckbxCheckIfU);
 		
 		
 		
