@@ -17,6 +17,7 @@ import java.awt.event.ActionEvent;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractListModel;
+import javax.swing.ButtonGroup;
 import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
@@ -138,7 +139,13 @@ public class GUI {
 			    new GradientPaint(0, 0, Color.BLUE, 600, 0, Color.RED);
 			panel.setPaint(paint);
 		
-		JPanel sectionPanel = panel;
+		JPanel sectionPanel;
+		if(image1 != null) {
+			sectionPanel = panel;
+		} else {
+			sectionPanel = new JPanel(); 
+		}
+		
 		sectionPanel.setBackground(new Color(147, 112, 219));
 		tabbedPane.addTab("Load Section", null, sectionPanel, null);
 		sectionPanel.setLayout(null);
@@ -384,7 +391,12 @@ public class GUI {
 			    new GradientPaint(0, 0, Color.BLUE, 600, 0, Color.RED);
 			panel.setPaint(paint2);
 		
-		JPanel QueryPanel = panel2;
+		JPanel QueryPanel;	
+	    if(image2 != null) {
+	    	QueryPanel = panel2;
+	    } else {
+	    	QueryPanel = new JPanel();
+	    }
 		QueryPanel.setBackground(new Color(147, 112, 219));
 		tabbedPane.addTab("Query", null, QueryPanel, null);
 		QueryPanel.setLayout(null);
@@ -597,30 +609,59 @@ public class GUI {
 		QueryPanel.add(chckbxWhereEnabled);
 		
 		////////////////////Button for add where///////////////////			
-		JButton btnAddWhere = new JButton("Add where");
+		JButton btnAddWhere = new JButton("add where");
 		btnAddWhere.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) {		
 				qualifiers.add(qualifier);
 				qAttrs.add(oneAttr);
 				criterion.add(criteria);				
 			}
 		});
-		btnAddWhere.setBounds(398, 435, 117, 25);
+		btnAddWhere.setBounds(387, 435, 117, 25);
 		btnAddWhere.setEnabled(false);
 		panel2.add(btnAddWhere);
 		
 		
 		
+		////////////////////Button for and/or///////////////////	
+		ButtonGroup buttons = new ButtonGroup();
+		
+		//and Button
+		JRadioButton rdbtnAnd = new JRadioButton("And");
+		rdbtnAnd.setForeground(Color.WHITE);
+		rdbtnAnd.setBounds(621, 431, 149, 23);
+		rdbtnAnd.setSelected(true);
+		
+		
+		//Or button
+		JRadioButton rdbtnOr = new JRadioButton("Or");
+		rdbtnOr.setForeground(Color.WHITE);
+		rdbtnOr.setBounds(524, 431, 149, 23);
+		//rdbtnOr.setSelected(true);
+		
+		buttons.add(rdbtnAnd);
+		buttons.add(rdbtnOr);
+		
+		panel2.add(rdbtnAnd);
+		panel2.add(rdbtnOr);
+		rdbtnOr.setEnabled(false);
+		rdbtnAnd.setEnabled(false);
+		
 		
 		////////////////////Button for if want than more one where clause///////////////////	
 		JCheckBox chckbxCheckIfU = new JCheckBox("check if u want more than one where");
+		chckbxCheckIfU.setForeground(Color.WHITE);
 		chckbxCheckIfU.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if(chckbxCheckIfU.isSelected()) {
 					btnAddWhere.setEnabled(true);
+					rdbtnOr.setEnabled(true);
+					rdbtnAnd.setEnabled(true);
 				}
 				else {
 					btnAddWhere.setEnabled(false);
+					rdbtnOr.setEnabled(false);
+					rdbtnAnd.setEnabled(false);
 					qualifiers = new ArrayList<String>();
 					qAttrs = new ArrayList<String>();
 					criterion = new ArrayList<String>();
@@ -636,16 +677,7 @@ public class GUI {
 		JButton btnExecuteQuery = new JButton("Execute Query");
 		btnExecuteQuery.setFont(new Font("eufm10", Font.BOLD, 16));
 		
-		//and Button
-		JRadioButton rdbtnAnd = new JRadioButton("And");
-		rdbtnAnd.setBounds(241, 435, 149, 23);
-		panel2.add(rdbtnAnd);
 		
-		
-		//Or button
-		JRadioButton rdbtnOr = new JRadioButton("Or");
-		rdbtnOr.setBounds(554, 435, 149, 23);
-		panel2.add(rdbtnOr);
 		
 		/**
 		 * this listener uses ListTableModel.java and RowTableModel.java which were obtained as an outside source.
@@ -696,6 +728,8 @@ public class GUI {
 		});
 		btnExecuteQuery.setBounds(12, 435, 164, 25);
 		QueryPanel.add(btnExecuteQuery);		
+		
+		
 		
 	}
 }
