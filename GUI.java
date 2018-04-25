@@ -140,6 +140,12 @@ public class GUI {
 				panel.setPaint(paint);
 			sectionPanel = panel; 
 			
+			JLabel lblLibraryThru = new JLabel("Library Thru");
+			lblLibraryThru.setFont(new Font("eufm10", Font.BOLD, 16));
+			lblLibraryThru.setForeground(new Color(255, 255, 255));
+			lblLibraryThru.setBounds(25, 227, 107, 15);
+			panel.add(lblLibraryThru);
+			
 		} catch(IllegalArgumentException e ) {
 			sectionPanel = new JPanel();
 		}
@@ -154,6 +160,7 @@ public class GUI {
 		
 		////////////////////library from list///////////////////
 		JLabel lblLibraryFrom = new JLabel("Library From");
+		lblLibraryFrom.setForeground(Color.WHITE);
 		lblLibraryFrom.setFont(new Font("eufm10", Font.BOLD, 16));
 		lblLibraryFrom.setBounds(25, 72, 107, 15);
 		sectionPanel.add(lblLibraryFrom);
@@ -227,7 +234,7 @@ public class GUI {
 		//make libraryThru list selectable
 		JCheckBox chckbxEnable = new JCheckBox("Library Thru");
 		chckbxEnable.setFont(new Font("eufm10", Font.BOLD, 16));
-		chckbxEnable.setBackground(Color.WHITE);
+		chckbxEnable.setBackground(new Color(0, 0, 0));
 		chckbxEnable.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if(chckbxEnable.isSelected()) {
@@ -237,17 +244,19 @@ public class GUI {
 				}
 			}
 		});
-		chckbxEnable.setBounds(3, 223, 129, 23);
+		chckbxEnable.setBounds(3, 223, 25, 23);
 		sectionPanel.add(chckbxEnable);
 		
 		////////////////////date buttons///////////////////
 		
 		JLabel lDateFrom = new JLabel("Date From "); 
+		lDateFrom.setForeground(Color.WHITE);
 		lDateFrom.setFont(new Font("eufm10", Font.BOLD, 16));
 		lDateFrom.setBounds(160, 328, 107, 15);
 		sectionPanel.add(lDateFrom);
 		
 		JLabel lDateThrough = new JLabel("Date Thru");
+		lDateThrough.setForeground(Color.WHITE);
 		lDateThrough.setFont(new Font("eufm10", Font.BOLD, 16));
 		lDateThrough.setBounds(473, 327, 107, 15);
 		sectionPanel.add(lDateThrough);
@@ -277,6 +286,7 @@ public class GUI {
 		fDateTo.setColumns(10);
 		
 		JLabel label = new JLabel("(0-2018)");
+		label.setForeground(Color.WHITE);
 		label.setFont(new Font("eufm10", Font.BOLD, 16));
 		label.setBounds(373, 328, 88, 15);
 		sectionPanel.add(label);
@@ -285,6 +295,7 @@ public class GUI {
 		
 		//prov from
 		JLabel lblProvenance = new JLabel("Provenance From");
+		lblProvenance.setForeground(Color.WHITE);
 		lblProvenance.setFont(new Font("eufm10", Font.BOLD, 16));
 		lblProvenance.setBounds(23, 418, 143, 15);
 		sectionPanel.add(lblProvenance);
@@ -308,6 +319,7 @@ public class GUI {
 		
 		//prov to
 		JLabel lblProvenanceThru = new JLabel("Provenance Thru");
+		lblProvenanceThru.setForeground(Color.WHITE);
 		lblProvenanceThru.setFont(new Font("eufm10", Font.BOLD, 16));
 		lblProvenanceThru.setBounds(23, 528, 143, 15);
 		sectionPanel.add(lblProvenanceThru);
@@ -394,6 +406,36 @@ public class GUI {
 				    new GradientPaint(0, 0, Color.BLUE, 600, 0, Color.RED);
 				panel2.setPaint(paint2);
 			QueryPanel = panel2;
+			
+			JLabel lblWhere = new JLabel("Where");
+			lblWhere.setForeground(new Color(255, 255, 255));
+			lblWhere.setFont(new Font("eufm10", Font.BOLD, 16));
+			lblWhere.setBounds(57, 251, 70, 15);
+			panel2.add(lblWhere);
+			
+			JLabel lblSelectAttributes = new JLabel("Select attributes");
+			lblSelectAttributes.setFont(new Font("eufm10", Font.BOLD, 16));
+			lblSelectAttributes.setForeground(new Color(255, 255, 255));
+			lblSelectAttributes.setBounds(57, 175, 119, 15);
+			panel2.add(lblSelectAttributes);
+			
+			JLabel lblOr = new JLabel("Or");
+			lblOr.setFont(new Font("eufm10", Font.BOLD, 16));
+			lblOr.setForeground(new Color(255, 255, 255));
+			lblOr.setBounds(700, 291, 70, 15);
+			panel2.add(lblOr);
+			
+			JLabel lblAnd = new JLabel("And");
+			lblAnd.setForeground(new Color(255, 255, 255));
+			lblAnd.setFont(new Font("eufm10", Font.BOLD, 16));
+			lblAnd.setBounds(700, 400, 70, 15);
+			panel2.add(lblAnd);
+			
+			JLabel lblMultipleWhere = new JLabel("Multiple Where");
+			lblMultipleWhere.setForeground(new Color(255, 255, 255));
+			lblMultipleWhere.setFont(new Font("eufm10", Font.BOLD, 16));
+			lblMultipleWhere.setBounds(154, 250, 130, 15);
+			panel2.add(lblMultipleWhere);
 		} catch(IllegalArgumentException e) {
 			QueryPanel = new JPanel();
 		}
@@ -412,6 +454,7 @@ public class GUI {
 		QueryPanel.add(lblSelectTable);
 		
 		JLabel lblSelectAttr = new JLabel("select attr");
+		lblSelectAttr.setForeground(new Color(255, 255, 255));
 		lblSelectAttr.setFont(new Font("eufm10", Font.BOLD, 16));
 		lblSelectAttr.setBounds(33, 291, 178, 15);
 		QueryPanel.add(lblSelectAttr);
@@ -442,9 +485,10 @@ public class GUI {
 		JList<String> selectAttrsList = new JList<String>();
 		selectAttrsList.setFont(new Font("eufm10", Font.BOLD, 16));
 		selectAttrsList.setBackground(new Color(255, 240, 245));
-		JCheckBox chckbxCheckIfYou = new JCheckBox("select attributes");
+		JCheckBox chckbxCheckIfYou = new JCheckBox("");
+		chckbxCheckIfYou.setForeground(new Color(0, 0, 0));
 		chckbxCheckIfYou.setFont(new Font("eufm10", Font.BOLD, 16));
-		chckbxCheckIfYou.setBackground(Color.WHITE);
+		chckbxCheckIfYou.setBackground(new Color(0, 0, 0));
 		
 		/**
 		 * activate the attributes list only when the user wants to see it 
@@ -460,7 +504,7 @@ public class GUI {
 			}
 		});
 		
-		chckbxCheckIfYou.setBounds(33, 167, 145, 23);
+		chckbxCheckIfYou.setBounds(33, 167, 21, 23);
 		QueryPanel.add(chckbxCheckIfYou);
 		
 		//make list scrollable
@@ -540,7 +584,7 @@ public class GUI {
 				
 			}
 		});
-		selectedAttributeBox.setBounds(164, 286, 606, 24);
+		selectedAttributeBox.setBounds(164, 286, 242, 24);
 		selectedAttributeBox.setEnabled(false);
 		QueryPanel.add(selectedAttributeBox);
 		
@@ -557,11 +601,12 @@ public class GUI {
 			}
 		});
 		
-		RelatoinBox.setBounds(164, 336, 606, 23);
+		RelatoinBox.setBounds(164, 336, 242, 23);
 		RelatoinBox.setEnabled(false);
 		QueryPanel.add(RelatoinBox);
 		
 		JLabel lblRelation = new JLabel("relation");
+		lblRelation.setForeground(new Color(255, 255, 255));
 		lblRelation.setFont(new Font("eufm10", Font.BOLD, 16));
 		lblRelation.setBounds(33, 340, 120, 15);
 		QueryPanel.add(lblRelation);
@@ -575,12 +620,13 @@ public class GUI {
 				criteria = fCriterion.getText();
 			}
 		});
-		fCriterion.setBounds(164, 392, 606, 31);
+		fCriterion.setBounds(164, 392, 242, 31);
 		fCriterion.setEditable(false);
 		QueryPanel.add(fCriterion);
 		fCriterion.setColumns(10);
 		
 		JLabel lblCriterion = new JLabel("criterion");
+		lblCriterion.setForeground(new Color(255, 255, 255));
 		lblCriterion.setFont(new Font("eufm10", Font.BOLD, 16));
 		lblCriterion.setBounds(33, 400, 70, 15);
 		QueryPanel.add(lblCriterion);
@@ -591,7 +637,7 @@ public class GUI {
 		 * the where sections are only available if the user chooses it
 		 * by default, selecting the where qualifier attribute, the relation box, and the criterion are unabled
 		 */
-		JCheckBox chckbxWhereEnabled = new JCheckBox("Where:");
+		JCheckBox chckbxWhereEnabled = new JCheckBox("");
 		chckbxWhereEnabled.setFont(new Font("eufm10", Font.BOLD, 16));
 		chckbxWhereEnabled.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -607,8 +653,8 @@ public class GUI {
 				}
 			}
 		});
-		chckbxWhereEnabled.setBackground(Color.WHITE);
-		chckbxWhereEnabled.setBounds(33, 243, 164, 23);
+		chckbxWhereEnabled.setBackground(new Color(0, 0, 0));
+		chckbxWhereEnabled.setBounds(33, 243, 21, 23);
 		QueryPanel.add(chckbxWhereEnabled);
 		
 		////////////////////Button for add where///////////////////			
@@ -620,7 +666,7 @@ public class GUI {
 				criterion.add(criteria);				
 			}
 		});
-		btnAddWhere.setBounds(387, 435, 117, 25);
+		btnAddWhere.setBounds(467, 334, 117, 25);
 		btnAddWhere.setEnabled(false);
 		QueryPanel.add(btnAddWhere);
 		
@@ -631,15 +677,17 @@ public class GUI {
 		
 		//and Button
 		JRadioButton rdbtnAnd = new JRadioButton("And");
-		rdbtnAnd.setForeground(Color.WHITE);
-		rdbtnAnd.setBounds(621, 431, 149, 23);
+		rdbtnAnd.setBackground(new Color(0, 0, 0));
+		rdbtnAnd.setForeground(Color.BLACK);
+		rdbtnAnd.setBounds(672, 395, 21, 23);
 		rdbtnAnd.setSelected(true);
 		
 		
 		//Or button
 		JRadioButton rdbtnOr = new JRadioButton("Or");
-		rdbtnOr.setForeground(Color.WHITE);
-		rdbtnOr.setBounds(524, 431, 149, 23);
+		rdbtnOr.setBackground(new Color(0, 0, 0));
+		rdbtnOr.setForeground(Color.BLACK);
+		rdbtnOr.setBounds(672, 286, 21, 23);
 		//rdbtnOr.setSelected(true);
 		
 		buttons.add(rdbtnAnd);
@@ -653,6 +701,7 @@ public class GUI {
 		
 		////////////////////Button for if want than more one where clause///////////////////	
 		JCheckBox chckbxCheckIfU = new JCheckBox("check if u want more than one where");
+		chckbxCheckIfU.setBackground(new Color(0, 0, 0));
 		chckbxCheckIfU.setForeground(Color.BLACK);
 		chckbxCheckIfU.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -671,7 +720,7 @@ public class GUI {
 				}
 			}
 		});
-		chckbxCheckIfU.setBounds(365, 242, 293, 23);
+		chckbxCheckIfU.setBounds(117, 243, 21, 23);
 		QueryPanel.add(chckbxCheckIfU);
 		
 		
