@@ -140,16 +140,17 @@ public class GUI {
 				panel.setPaint(paint);
 			sectionPanel = panel; 
 			
-			JLabel lblLibraryThru = new JLabel("Library Thru");
-			lblLibraryThru.setFont(new Font("eufm10", Font.BOLD, 16));
-			lblLibraryThru.setForeground(new Color(255, 255, 255));
-			lblLibraryThru.setBounds(25, 227, 107, 15);
-			panel.add(lblLibraryThru);
 			
 		} catch(IllegalArgumentException e ) {
 			sectionPanel = new JPanel();
 		}
 		
+
+		JLabel lblLibraryThru = new JLabel("Library Thru");
+		lblLibraryThru.setFont(new Font("eufm10", Font.BOLD, 16));
+		lblLibraryThru.setForeground(new Color(255, 255, 255));
+		lblLibraryThru.setBounds(25, 227, 107, 15);
+		sectionPanel.add(lblLibraryThru);
 		
 		
 		sectionPanel.setBackground(new Color(147, 112, 219));
@@ -406,39 +407,39 @@ public class GUI {
 				    new GradientPaint(0, 0, Color.BLUE, 600, 0, Color.RED);
 				panel2.setPaint(paint2);
 			QueryPanel = panel2;
-			
-			JLabel lblWhere = new JLabel("Where");
-			lblWhere.setForeground(new Color(255, 255, 255));
-			lblWhere.setFont(new Font("eufm10", Font.BOLD, 16));
-			lblWhere.setBounds(57, 251, 70, 15);
-			panel2.add(lblWhere);
-			
-			JLabel lblSelectAttributes = new JLabel("Select attributes");
-			lblSelectAttributes.setFont(new Font("eufm10", Font.BOLD, 16));
-			lblSelectAttributes.setForeground(new Color(255, 255, 255));
-			lblSelectAttributes.setBounds(57, 175, 119, 15);
-			panel2.add(lblSelectAttributes);
-			
-			JLabel lblOr = new JLabel("Or");
-			lblOr.setFont(new Font("eufm10", Font.BOLD, 16));
-			lblOr.setForeground(new Color(255, 255, 255));
-			lblOr.setBounds(700, 291, 70, 15);
-			panel2.add(lblOr);
-			
-			JLabel lblAnd = new JLabel("And");
-			lblAnd.setForeground(new Color(255, 255, 255));
-			lblAnd.setFont(new Font("eufm10", Font.BOLD, 16));
-			lblAnd.setBounds(700, 400, 70, 15);
-			panel2.add(lblAnd);
-			
-			JLabel lblMultipleWhere = new JLabel("Multiple Where");
-			lblMultipleWhere.setForeground(new Color(255, 255, 255));
-			lblMultipleWhere.setFont(new Font("eufm10", Font.BOLD, 16));
-			lblMultipleWhere.setBounds(154, 250, 130, 15);
-			panel2.add(lblMultipleWhere);
 		} catch(IllegalArgumentException e) {
 			QueryPanel = new JPanel();
 		}
+		
+		JLabel lblWhere = new JLabel("Where");
+		lblWhere.setForeground(new Color(255, 255, 255));
+		lblWhere.setFont(new Font("eufm10", Font.BOLD, 16));
+		lblWhere.setBounds(57, 251, 70, 15);
+		QueryPanel.add(lblWhere);
+		
+		JLabel lblSelectAttributes = new JLabel("Select attributes");
+		lblSelectAttributes.setFont(new Font("eufm10", Font.BOLD, 16));
+		lblSelectAttributes.setForeground(new Color(255, 255, 255));
+		lblSelectAttributes.setBounds(57, 175, 119, 15);
+		QueryPanel.add(lblSelectAttributes);
+		
+		JLabel lblOr = new JLabel("Or");
+		lblOr.setFont(new Font("eufm10", Font.BOLD, 16));
+		lblOr.setForeground(new Color(255, 255, 255));
+		lblOr.setBounds(700, 291, 70, 15);
+		QueryPanel.add(lblOr);
+		
+		JLabel lblAnd = new JLabel("And");
+		lblAnd.setForeground(new Color(255, 255, 255));
+		lblAnd.setFont(new Font("eufm10", Font.BOLD, 16));
+		lblAnd.setBounds(700, 400, 70, 15);
+		QueryPanel.add(lblAnd);
+		
+		JLabel lblMultipleWhere = new JLabel("Multiple Where");
+		lblMultipleWhere.setForeground(new Color(255, 255, 255));
+		lblMultipleWhere.setFont(new Font("eufm10", Font.BOLD, 16));
+		lblMultipleWhere.setBounds(154, 250, 130, 15);
+		QueryPanel.add(lblMultipleWhere);
 		
 		
 		
