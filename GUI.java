@@ -153,7 +153,7 @@ public class GUI {
 		sectionPanel.add(lblLibraryThru);
 		
 		
-		sectionPanel.setBackground(new Color(147, 112, 219));
+		sectionPanel.setBackground(new Color(0, 0, 0));
 		tabbedPane.addTab("Load Section", null, sectionPanel, null);
 		sectionPanel.setLayout(null);
 		
@@ -443,7 +443,7 @@ public class GUI {
 		
 		
 		
-		QueryPanel.setBackground(new Color(147, 112, 219));
+		QueryPanel.setBackground(new Color(0, 0, 0));
 		tabbedPane.addTab("Query", null, QueryPanel, null);
 		QueryPanel.setLayout(null);
 		
