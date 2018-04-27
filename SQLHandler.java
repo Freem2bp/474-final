@@ -113,11 +113,11 @@ public class SQLHandler
 	 * The method behind the Section search pane of the Gui
 	 * @param libraryFrom library from, in the absence of libraryTo it is set as a match to libSiglum
 	 * @param LibraryTo the end of our between statement
-	 * @param dateFrom the first date in a between qualifier
-	 * @param dateTo
-	 * @param provenance1
-	 * @param provenance2
-	 * @return
+	 * @param dateFrom the first date in a between clause
+	 * @param dateTo the second date in a between clause
+	 * @param provenance1 the first provenance in a between clause
+	 * @param provenance2 the second provenance in a between clause
+	 * @return a resultset formed from the query
 	 */
 	public ArrayList<String> executePane1(String libraryFrom, String LibraryTo, String dateFrom, String dateTo, String provenance1, String provenance2) {
 		
@@ -245,7 +245,7 @@ public class SQLHandler
 	 * version of the method that is called if the extra qualifiers are disabled on pane2
 	 * @param attributes a list of attributes the user wants to see output
 	 * @param table the origin table to get the attributes
-	 * @return
+	 * @return the result set of our query
 	 */
 	public ResultSet executeStructuredQuery(ArrayList<String> attributes , String table) {
 		
@@ -281,12 +281,13 @@ public class SQLHandler
 }
 	
 	/**
-	 * a third version that allows for multiple where clauses, if we find a way to incorporate it in the gui.
+	 * a third version that allows for multiple where clauses
 	 * @param attributes a list of attributes the user wants to see output
 	 * @param table the origin table to get the attributes
 	 * @param qualifier the relation of the criteria
 	 * @param qualifierAtt the attribute that we will be restricting on
 	 * @param criteria the search 
+	 * @param joint the connector of the clauses, AND/OR
 	 * @return a resultset formed from the query
 	 *  reads as {"chantID" "FeastID}, Chant, leafNumber, Ends With, r 
 	 */
@@ -643,7 +644,7 @@ public class SQLHandler
 	        try 
 	        {
 	        	con = DriverManager.getConnection("jdbc:mysql://mysql.cs.jmu.edu/Manuscript2018",
-	                                              "nortonml", "visitatio");
+	                                              "nortonml", "visitatio"); //HERE IS THE SQL CONNECTOR NORTON
 	        	// System.out.println("Connection Made");
 	            
 	        	stmt = con.createStatement();
@@ -686,98 +687,4 @@ public class SQLHandler
 		
 	}
 		
-} // class SQLHandler
-
-
-// REFERENCES: these methods were initially designed to be utilized, their use has been repurposed elsewhere and these comments exist for our reference
-//public ResultSet executeChantSearch(ArrayList<String> butes, String qualifier, String qualifierAtt, String criteria) {
-//ResultSet rs = null;
-//String fixedAttributes;
-//if (butes == null || butes.isEmpty()) {
-//fixedAttributes = "*";
-//}
-//else {
-//fixedAttributes = queryString(butes);
-//}
-//String fixedCriteria = "%";
-//switch (qualifier) {//	private HashMap<String,String> populateMap() {     REDACTED METHOD FOR REFERENCE
-//
-//ResultSet rs = null;
-//HashMap<String, String> returner = new HashMap<String, String>();
-//try
-//{
-//	rs = stmt.executeQuery("SELECT libSiglum, city, library from Library" );
-//	
-//	while (rs.next()) {
-//		returner.put(rs.getString("city") + " - " + rs.getString("library"),rs.getString("libSiglum"));
-//	}
-//	
-//	
-//
-//} // end try
-//
-//catch ( SQLException e)
-//{
-//	handleSQLError(e, "SELECT libSiglum, library from Library");
-//
-//} // end catch
-//
-//return returner;
-//
-//}
-
-//case "Starts With":
-//	fixedCriteria = criteria + "%";
-//	break;
-//case "Ends With":
-//	fixedCriteria = "%" + criteria;
-//	break;
-//case "Is":
-//	fixedCriteria = criteria;
-//	break;
-//case "Contains":
-//	fixedCriteria = "%" + criteria + "%";
-//	break;
-//}
-
-//String query =  "Select " + fixedAttributes + " FROM Chant where " + qualifierAtt  + " like '" + fixedCriteria + "'";
-//try
-//{
-//	rs = stmt.executeQuery(query);
-//} // end try
-//
-//catch ( SQLException e)
-//{
-//	handleSQLError( e, query );
-//	
-//} // end catch
-//
-//return rs;
-//}
-//private HashMap<String,String> populateMap() {     REDACTED METHOD FOR REFERENCE
-//
-//	ResultSet rs = null;
-//	HashMap<String, String> returner = new HashMap<String, String>();
-//	try
-//	{
-//		rs = stmt.executeQuery("SELECT libSiglum, city, library from Library" );
-//		
-//		while (rs.next()) {
-//			returner.put(rs.getString("city") + " - " + rs.getString("library"),rs.getString("libSiglum"));
-//		}
-//		
-//		
-//	
-//	} // end try
-//	
-//	catch ( SQLException e)
-//	{
-//		handleSQLError(e, "SELECT libSiglum, library from Library");
-//	
-//	} // end catch
-//	
-//	return returner;
-//
-//}
-
-
+}
