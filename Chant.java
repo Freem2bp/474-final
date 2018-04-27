@@ -1,6 +1,6 @@
 package db;
 /**
- * A small class representing a chant in the database
+ * A small class representing a chant in the database -UNUSED-
  * filled with simple getters and a toString
  *
  *created by Brian Freeman
