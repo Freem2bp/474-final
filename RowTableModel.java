@@ -18,6 +18,7 @@ import javax.swing.table.*;
  *  setRowClass() and setDataAndColumnNames() methods either directly,
  *  by using the various constructors, or indirectly.
  * Not original code we (Behan Alavi and Brian Freeman) found this at URL
+ * https://tips4java.wordpress.com/2008/11/21/row-table-model/
  */
 abstract class RowTableModel<T> extends AbstractTableModel
 {
