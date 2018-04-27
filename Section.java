@@ -1,4 +1,4 @@
-package db;
+package sql_project;
 
 public class Section {
  /**
