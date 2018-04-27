@@ -1,7 +1,11 @@
 package db;
 
 public class Section {
-
+ /**
+  * A small class designed to simulate a section in the database, used exclusively for pane1
+  * By Brian Freeman
+  */
+  
 	
 	private String siglum;
 	private String[] liocc;
