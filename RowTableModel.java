@@ -17,7 +17,7 @@ import javax.swing.table.*;
  *  Any class that extends this class must make sure to invoke the
  *  setRowClass() and setDataAndColumnNames() methods either directly,
  *  by using the various constructors, or indirectly.
- *
+ * Not original code we (Behan Alavi and Brian Freeman) found this at URL
  */
 abstract class RowTableModel<T> extends AbstractTableModel
 {
