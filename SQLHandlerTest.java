@@ -1,5 +1,8 @@
 package db;
-
+/**
+ * test class, for checking string manipulations 
+ *
+ */
 import static org.junit.Assert.*;
 import java.util.ArrayList;
 
