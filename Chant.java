@@ -1,4 +1,10 @@
 package db;
+/**
+ * A small class representing a chant in the database
+ * filled with simple getters and a toString
+ *
+ *created by Brian Freeman
+ */
 
 public class Chant {
 	
